@@ -1,0 +1,195 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "jest": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "eslint:recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "max-len": [
+            "error",
+            {
+                "code": 200
+            }
+        ],
+        "no-restricted-syntax": [
+            "error"
+        ],
+        "no-lonely-if": 0,
+        "allowElseIf": 0,
+        "prefer-template": 2,
+        "default-case": 2,
+        "no-mixed-operators": 1,
+        "no-confusing-arrow": 0,
+        "no-new": 0,
+        "no-undef": 2,
+        "no-bitwise": 1,
+        "import/no-unresolved": [
+            1,
+            {
+                "ignore": [
+                    ".+\/components\/.+"
+                ]
+            }
+        ],
+        "arrow-spacing": [
+            "error",
+            {
+                "before": true,
+                "after": true
+            }
+        ],
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "keyword-spacing": [
+            "error",
+            {
+                "before": true,
+                "after": true
+            }
+        ],
+        "space-infix-ops": [
+            "error",
+            {
+                "int32Hint": false
+            }
+        ],
+        "func-call-spacing": [
+            "error",
+            "never"
+        ],
+        "key-spacing": [
+            "error",
+            {
+                "beforeColon": false
+            }
+        ],
+        "arrow-parens": [
+            2,
+            "as-needed",
+            {
+                "requireForBlockBody": true
+            }
+        ],
+        "no-nested-ternary": "warn",
+        "no-multiple-empty-lines": [
+            "warn",
+            {
+                "max": 1
+            }
+        ],
+        "require-atomic-updates": "error",
+        "radix": [
+            "error",
+            "as-needed"
+        ],
+        "react/prop-types": [
+            0
+        ],
+        "linebreak-style": 0,
+        "jsx-a11y/click-events-have-key-events": [
+            0
+        ],
+        "jsx-a11y/no-noninteractive-element-interactions": [
+            0
+        ],
+        "react/require-default-props": [
+            0
+        ],
+        "no-console": [
+            1
+        ],
+        "prefer-const": "error",
+        "react/forbid-prop-types": [
+            1
+        ],
+        "react/state-in-constructor": 0,
+        "react/jsx-props-no-spreading": 0,
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js"
+                ]
+            }
+        ],
+        "jsx-quotes": 0,
+        "quotes": 0,
+        "import/no-extraneous-dependencies": 0,
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "react/jsx-indent": [
+            "error",
+            4
+        ],
+        "react/jsx-indent-props": [
+            "error",
+            4
+        ],
+        "max-params": [
+            "error",
+            7
+        ],
+        "object-curly-newline": [
+            "error",
+            {
+                "ObjectExpression": "always",
+                "ObjectPattern": {
+                    "multiline": true
+                },
+                "ImportDeclaration": "never",
+                "ExportDeclaration": {
+                    "multiline": true,
+                    "minProperties": 3
+                }
+            }
+        ],
+        "import/prefer-default-export": "off",
+        "no-unused-vars": "warn",
+        "no-plusplus": [
+            2,
+            {
+                "allowForLoopAfterthoughts": true
+            }
+        ],
+        "no-submodule-imports": 0,
+        "import/extensions": 0,
+        "no-underscore-dangle": 0
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "paths": [
+                    "src"
+                ],
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        }
+    }
+}

@@ -6,5 +6,5 @@ export const posts = [
         picture: '',
         category: 'Inne',
         date: Date.now(),
-    }
-]
+    },
+];

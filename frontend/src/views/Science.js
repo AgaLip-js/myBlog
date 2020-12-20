@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-const Science = () => {
-    return (
-        <div>
-            <p>Nauka</p>
-        </div>
-    )
-}
+const Science = () => (
+    <div>
+        <p>Nauka</p>
+    </div>
+);
 
-export default Science
+export default Science;

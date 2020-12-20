@@ -44,7 +44,7 @@ const StyledTextArea = styled.textarea`
   font-weight: ${({ theme }) => theme.font500};
   line-height: inherit;
   transition: 0.3s ease;
-`
+`;
 
 const Input = ({
     type,
@@ -56,38 +56,36 @@ const Input = ({
     title,
     secondary,
     required,
-    textarea
-  }) => {
-    return (
-  textarea ? (
-    <>
-        <StyledTextArea
-         type={type}
-         name={name}
-         id={id}
-         onChange={onChange}
-         onBlur={onBlur}
-         value={value}
-         required={required}
-        />
-        <StyledLabel htmlFor={id}>{title}</StyledLabel>
-        </>
-      ): (
+    textarea,
+}) => (
+    textarea ? (
         <>
-        <StyledInput
-          type={type}
-          name={name}
-          id={id}
-          onChange={onChange}
-          onBlur={onBlur}
-          value={value}
-          props={secondary}
-          required={required}
-        />
-        <StyledLabel htmlFor={id}>{title}</StyledLabel>
+            <StyledTextArea
+                type={type}
+                name={name}
+                id={id}
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value}
+                required={required}
+            />
+            <StyledLabel htmlFor={id}>{title}</StyledLabel>
         </>
-        )
-    );
-  };
+    ) : (
+        <>
+            <StyledInput
+                type={type}
+                name={name}
+                id={id}
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value}
+                props={secondary}
+                required={required}
+            />
+            <StyledLabel htmlFor={id}>{title}</StyledLabel>
+        </>
+    )
+);
 
-  export default Input;
+export default Input;

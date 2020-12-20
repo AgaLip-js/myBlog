@@ -1,40 +1,37 @@
-import {
-    ADD_CONTENT,
-    REMOVE_CONTENT,
-    EDIT_CONTENT
-  } from '../actions/types';
+import { ADD_CONTENT, REMOVE_CONTENT, EDIT_CONTENT } from "../actions/types";
 
-  const initialState = {
+const initialState = {
     content: [],
-    loading: false
-  };
+    loading: false,
+};
 
-  export default function(state = initialState, action) {
+const contentReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_CONTENT:
             return {
-              ...state,
-              content: [ ...state.content,action.payload.content]
+                ...state,
+                content: [...state.content, action.payload.content],
             };
         case REMOVE_CONTENT: {
-                return {
-                  ...state,
-                  content: state.content.filter((c) => {
+            return {
+                ...state,
+                content: state.content.filter((c) => {
                     if (c.id !== action.payload.id) {
                         return c;
-                    } else {
-                        return null;
                     }
-                  }),
-                };
-              }
-              case EDIT_CONTENT: {
-                return {
-                  ...state,
-                  content: action.payload.newContent,
-                };
-              }
-      default:
-        return state;
+                    return null;
+                }),
+            };
+        }
+        case EDIT_CONTENT: {
+            return {
+                ...state,
+                content: action.payload.newContent,
+            };
+        }
+        default:
+            return state;
     }
-  }
+};
+
+export default contentReducer;

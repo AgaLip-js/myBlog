@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import styled from 'styled-components';
@@ -21,22 +21,21 @@ const StyledLoginContent = styled.div`
     height: fit-content;
 `;
 
-
 const PrivateLogin = () => {
-  const { auth } = useSelector((store) => ({
-    auth: store.auth,
-  }));
+    const { auth } = useSelector(store => ({
+        auth: store.auth,
+    }));
 
-  if (auth.isAuthenticated) {
-    return <Redirect to="/admin-cms/dashboardCMS" />;
-  }
-  return (
-    <StyledLoginWrapper>
-      <StyledLoginContent>
-        <LoginForm title="Zaloguj się" />
-      </StyledLoginContent>
-    </StyledLoginWrapper>
-  );
+    if (auth.isAuthenticated) {
+        return <Redirect to="/admin-cms/dashboardCMS" />;
+    }
+    return (
+        <StyledLoginWrapper>
+            <StyledLoginContent>
+                <LoginForm title="Zaloguj się" />
+            </StyledLoginContent>
+        </StyledLoginWrapper>
+    );
 };
 
 export default PrivateLogin;
