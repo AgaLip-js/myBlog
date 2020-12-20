@@ -4,7 +4,6 @@ import authReducer from './authReducer';
 import imageReducer from './imageReducer';
 import contentReducer from "./contentReducer";
 
-
 export default combineReducers({
     post: postReducer,
     auth: authReducer,
