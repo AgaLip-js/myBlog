@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import background from "../../assets/background.webp";
 import Button from "../atoms/Button";
+import EditorContainer from "../EditorContainer/EditorContainer";
+import SunEditorComponent from "../SunEditor/SunEditor";
 
 const StyledWrapper = styled.div`
     display: grid;
@@ -48,9 +50,10 @@ const StyledText = styled.p`
 
 const PostCard = ({ date, category, id, title, content }) => {
     const truncate = input => (input.length > 350 ? `${input.substring(0, 350)}...` : input);
+    console.log(content);
     const newDate = moment(date).format("DD/MM/YYYY");
-    const mainContent = content.find(ct => ct.type === "text").object;
 
+    const mainContent = content.find(ct => ct.type === "text").object;
     return (
         <StyledWrapper>
             <StyledImage icon={background} />
@@ -62,7 +65,11 @@ const PostCard = ({ date, category, id, title, content }) => {
                     {category}
                 </StyledDateCategory>
                 <StyledTitle>{title}</StyledTitle>
-                <StyledText>{truncate(mainContent)}</StyledText>
+                {/* eslint-disable-next-line react/no-danger */}
+                <div dangerouslySetInnerHTML={{
+                    __html: truncate(mainContent),
+                }}
+                />
                 <Link
                     to={`/post/${id}`}
                     style={{
@@ -75,5 +82,4 @@ const PostCard = ({ date, category, id, title, content }) => {
         </StyledWrapper>
     );
 };
-
 export default PostCard;

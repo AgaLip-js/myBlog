@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+
+import SunEditorComponent from "../components/SunEditor/SunEditor";
 import { getImages } from "../redux/actions/imageAction";
 import { getPost } from "../redux/actions/postActions";
 
@@ -57,8 +59,17 @@ const PostView = ({ match }) => {
     return (
         <StyledWrapper>
             <StyledHeader>{post.title}</StyledHeader>
+
             <StyledContainerForContent>
-                {post.content && !loading && post.content.map(c => (c.type === "text" ? <StyledText key={c.id}>{c.object}</StyledText> : <StyledImg src={`${getImgUrl(c.object)[0].url}`} />))}
+                {post.content && !loading && post.content.map(c => (c.type === "text"
+                    ? (
+                        // eslint-disable-next-line react/no-danger
+                        <div dangerouslySetInnerHTML={{
+                            __html: c.object,
+                        }}
+                        />
+                    )
+                    : (<StyledImg src={`${getImgUrl(c.object)[0].url}`} />)))}
             </StyledContainerForContent>
         </StyledWrapper>
     );

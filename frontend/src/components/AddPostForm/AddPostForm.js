@@ -1,15 +1,19 @@
 import { faCamera, faFont } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Quill from "quill";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import SunEditor from "suneditor-react";
 import { v4 as uuidv4 } from "uuid";
 import { addContent, editContent, removeContent } from "../../redux/actions/contentAction";
 import { addImage } from "../../redux/actions/imageAction";
+import { addPost } from "../../redux/actions/postActions";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 import InputImg from "../atoms/InputImg";
 import EditorContainer from "../EditorContainer/EditorContainer";
+import SunEditorComponent from "../SunEditor/SunEditor";
 
 const StyledContent = styled.div`
     display: flex;
@@ -57,8 +61,9 @@ const StyledContainerForContent = styled.div`
 
 const AddPostForm = () => {
     const [fileName, setFileName] = useState([]);
-    const { content } = useSelector(store => ({
+    const { content, post } = useSelector(store => ({
         content: store.content.content,
+        post: store.post.post,
     }));
     const contentArray = [];
     const [newContent, setNewContent] = useState(contentArray);
@@ -116,32 +121,37 @@ const AddPostForm = () => {
                 return c;
             }),
         );
+
         dispatch(editContent(newContent));
         // eslint-disable-next-line
     }, [fileName, setFileName]);
 
     const uploadPhotos = () => {
-        const emptyArray = [];
-        emptyArray.push(selectedFile);
-        setSelectedFile(emptyArray);
-        const data = new FormData();
-        for (let x = 0; x < selectedFile.length; x++) {
-            data.append("file", selectedFile[x]);
+        if (selectedFile) {
+            const emptyArray = [];
+            emptyArray.push(selectedFile);
+            setSelectedFile(emptyArray);
+            const data = new FormData();
+            for (let x = 0; x < selectedFile.length; x++) {
+                data.append("file", selectedFile[x]);
+            }
+            data.append("file", selectedFile);
+            dispatch(addImage(data));
+            setSelectedFile(null);
         }
-        data.append("file", selectedFile);
-        dispatch(addImage(data));
-        setSelectedFile(null);
     };
 
     const addNewPost = () => {
         uploadPhotos();
-        setNewPost({
+
+        dispatch(addPost({
             ...newPost,
             content: newContent,
-        });
+        }));
     };
 
     const editorChange = (objectContent, id) => {
+        console.log(objectContent);
         setNewContent(
             newContent.map((c) => {
                 if (c.id === id) {
@@ -166,7 +176,12 @@ const AddPostForm = () => {
                     {content
                         && content.map((c, i) => c.type === "text" ? (
                             <StyledContainerText key={c.id}>
-                                <EditorContainer editorChange={editorChange} id={c.id} />
+                                <SunEditorComponent editorChange={editorChange} id={c.id} initialContent="" />
+                                {/* eslint-disable-next-line react/no-danger */}
+                                <div dangerouslySetInnerHTML={{
+                                    __html: c.object,
+                                }}
+                                />
                                 <Button onClick={() => handleRemoveContent(c.id)}>Usuń pole</Button>
                             </StyledContainerText>
                         ) : (
