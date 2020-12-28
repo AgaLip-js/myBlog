@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import Comments from "../components/Comments/Comments";
 import { getImages } from "../redux/actions/imageAction";
 import { getPost } from "../redux/actions/postActions";
 
@@ -58,8 +59,11 @@ const PostView = ({ match }) => {
         <StyledWrapper>
             <StyledHeader>{post.title}</StyledHeader>
             <StyledContainerForContent>
-                {post.content && !loading && post.content.map(c => (c.type === "text" ? <StyledText key={c.id}>{c.object}</StyledText> : <StyledImg src={`${getImgUrl(c.object)[0].url}`} />))}
+                {post.content
+                    && !loading
+                    && post.content.map(c => (c.type === "text" ? <StyledText key={c._id}>{c.object}</StyledText> : <StyledImg key={c._id} src={`${getImgUrl(c.object)[0].url}`} />))}
             </StyledContainerForContent>
+            <Comments />
         </StyledWrapper>
     );
 };
