@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw, ContentState, convertFromRaw, convertFromHTML } from "draft-js";
+import { convertToHTML } from 'draft-convert';
 import { Editor } from "react-draft-wysiwyg";
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
 
 function uploadImageCallBack(file) {
     return new Promise((resolve, reject) => {
@@ -25,24 +28,28 @@ class EditorContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorState: EditorState.createEmpty(),
+            // eslint-disable-next-line react/destructuring-assignment
+            editorState: this.props.state ? this.props.state.object : EditorState.createEmpty(),
         };
     }
 
     onEditorStateChange = (editorState) => {
-        const { editorChange, id } = this.props;
+        const { editorChange, id, state } = this.props;
         this.setState({
             editorState,
         });
-        const a = editorState.getCurrentContent();
-        const b = convertToRaw(a);
-        const c = b.blocks[0].text;
-        editorChange(c, id);
+
+        const guni = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+        const contentBlock = convertFromHTML(guni);
+        const contentState = ContentState.createFromBlockArray(contentBlock);
+        const editor = EditorState.createWithContent(contentState);
+        editorChange(editorState, id);
     };
 
     render() {
         const { editorState } = this.state;
-
+        const { readOnly, toolbarHidden, state } = this.props;
+        console.log(state[0]);
         return (
             <div
                 className="editor"
@@ -52,7 +59,9 @@ class EditorContainer extends Component {
             >
                 <Editor
                     editorState={editorState}
+                    readOnly={readOnly}
                     onEditorStateChange={this.onEditorStateChange}
+                    toolbarHidden={toolbarHidden}
                     toolbar={{
                         inline: {
                             inDropdown: true,

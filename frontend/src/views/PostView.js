@@ -58,10 +58,20 @@ const PostView = ({ match }) => {
     return (
         <StyledWrapper>
             <StyledHeader>{post.title}</StyledHeader>
+
             <StyledContainerForContent>
                 {post.content
                     && !loading
-                    && post.content.map(c => (c.type === "text" ? <StyledText key={c._id}>{c.object}</StyledText> : <StyledImg key={c._id} src={`${getImgUrl(c.object)[0].url}`} />))}
+                    && post.content.map(c => c.type === "text" ? (
+                    // eslint-disable-next-line react/no-danger
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: c.object,
+                            }}
+                        />
+                    ) : (
+                        <StyledImg src={`${getImgUrl(c.object)[0].url}`} />
+                    ))}
             </StyledContainerForContent>
             <Comments />
         </StyledWrapper>

@@ -17,7 +17,7 @@ user: {
         required: true,
       },
         object: {
-        type: String,
+        type: Object,
         },
     }
   ],
