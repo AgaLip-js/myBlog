@@ -26,7 +26,7 @@ const SunEditorComponent = ({ initialContent, title, onSubmit, editorChange, id,
                 setContents={initialContent}
                 onChange={setContent}
                 autoFocus
-                width="100%"
+                width="1000px"
                 height="150px"
                 setOptions={{
                     buttonList: [

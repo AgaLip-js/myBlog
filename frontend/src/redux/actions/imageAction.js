@@ -1,4 +1,5 @@
 import axios from "axios";
+import { returnErrors } from "./errorAction";
 import { ADD_IMAGE, GET_ERRORS, GET_IMAGE, GET_IMAGES, IMAGE_LOADING } from "./types";
 
 // Set loading state
@@ -48,8 +49,7 @@ export const addImage = uploadData => (dispatch) => {
             type: ADD_IMAGE,
             payload: res.data,
         }))
-        .catch(err => dispatch({
-            type: GET_ERRORS,
-            payload: err.response.data,
-        }));
+        .catch((err) => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
 };

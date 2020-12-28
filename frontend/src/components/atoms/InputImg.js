@@ -75,7 +75,7 @@ const StyledIconContainer = styled.button`
     background: ${({ theme }) => theme.primaryBackground};
 `;
 
-const InputImg = ({ name, fileName, setFileName, setSelectedFile, selectedFile }) => {
+const InputImg = ({ name, fileName, setFileName, setSelectedFile, selectedFile, setErrorMsg }) => {
     const [fileURL, setfileURL] = useState("");
     const fileInput = React.useRef(null);
 
@@ -109,35 +109,49 @@ const InputImg = ({ name, fileName, setFileName, setSelectedFile, selectedFile }
 
         return temp;
     };
-
-    const addPhoto = (e) => {
-        if (selectedFile) {
-            const fileObject = addToObject(selectedFile, Object.keys(selectedFile).length, e.target.files[0]);
-            const fileObjectWithLength = addToObject(fileObject, "length", Object.keys(fileObject).length);
-            setSelectedFile(fileObjectWithLength);
-        } else {
-            setSelectedFile(e.target.files);
+    const validateSize = (file) => {
+        const FileSize = file.files[0].size / 1024 / 1024; // in MiB
+        if (FileSize > 2) {
+            // eslint-disable-next-line no-alert
+            setErrorMsg('File size exceeds 2 MiB');
+            return false;
         }
-
-        const newPhoto = e.target.files[0].name;
-        const newPhotoObject = [
-            {
-                title: newPhoto,
-                id: name,
-            },
-        ];
-        setFileName([...fileName, ...newPhotoObject]);
-        const urlObject = URL.createObjectURL(fileInput.current.files[0]);
-        setfileURL(urlObject);
+        setErrorMsg('');
+        return true;
     };
-    const findID = fileName.find(fn => fn.id === name);
-
     const clearPhoto = () => {
         const clearFileName = fileName.filter(fn => fn.id !== name);
         fileInput.current.value = "";
         setFileName(clearFileName);
         setfileURL(null);
     };
+
+    const addPhoto = (e) => {
+        const checkValidation = validateSize(e.target);
+        if (checkValidation) {
+            if (selectedFile) {
+                const fileObject = addToObject(selectedFile, Object.keys(selectedFile).length, e.target.files[0]);
+                const fileObjectWithLength = addToObject(fileObject, "length", Object.keys(fileObject).length);
+                setSelectedFile(fileObjectWithLength);
+            } else {
+                setSelectedFile(e.target.files);
+            }
+
+            const newPhoto = e.target.files[0].name;
+            const newPhotoObject = [
+                {
+                    title: newPhoto,
+                    id: name,
+                },
+            ];
+            setFileName([...fileName, ...newPhotoObject]);
+            const urlObject = URL.createObjectURL(fileInput.current.files[0]);
+            setfileURL(urlObject);
+        } else {
+            clearPhoto();
+        }
+    };
+    const findID = fileName.find(fn => fn.id === name);
 
     return (
         <StyledImgWrapper>

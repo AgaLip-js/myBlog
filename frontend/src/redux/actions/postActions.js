@@ -1,4 +1,5 @@
 import axios from "axios";
+import { returnErrors } from "./errorAction";
 import { ADD_POST, CLEAR_ERRORS, DELETE_POST, GET_ERRORS, GET_POST, GET_POSTS, POST_LOADING } from "./types";
 
 // Set loading state
@@ -20,10 +21,7 @@ export const addPost = postData => (dispatch) => {
             type: ADD_POST,
             payload: res.data,
         }))
-        .catch(err => dispatch({
-            type: GET_ERRORS,
-            payload: err.response.data,
-        }));
+        .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
 };
 
 // Get Posts
