@@ -64,6 +64,35 @@ const StyledSucces = styled.p`
 color: green;
 text-align: center;
 `;
+const StyledSelect = styled.select`
+  outline: none;
+  display: block;
+  background: ${({ theme }) => theme.lightcolor};
+  width: 250px;
+  border: 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 12px 20px;
+  color: ${({ theme }) => theme.blackcolor};
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: ${({ theme }) => theme.font500};
+  line-height: inherit;
+  transition: 0.3s ease;
+  font-size: 14px;
+`;
+const StyledOption = styled.option``;
+const StyledLabel = styled.label`
+  display: block;
+  margin-bottom: 25px;
+  margin-top: 5px;
+  color: ${({ theme }) => theme.blackcolor};
+  font-size: ${({ theme }) => theme.fontSize.xxs};
+  font-weight: ${({ theme }) => theme.font500};
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+`;
 
 const AddPostForm = () => {
     const [fileName, setFileName] = useState([]);
@@ -108,6 +137,7 @@ const AddPostForm = () => {
         content,
         category: "",
         id: uuidv4(),
+        section: '',
     };
 
     const [newPost, setNewPost] = useState(postArray);
@@ -160,6 +190,8 @@ const AddPostForm = () => {
             setErrorMsg('Category is empty !');
         } else if (!newContent.find(nc => nc.object.trim())) {
             setErrorMsg('Content is empty !');
+        } else if (isEmpty(newPost.section)) {
+            setErrorMsg('Section is empty !');
         } else {
             uploadPhotos();
 
@@ -231,6 +263,19 @@ const AddPostForm = () => {
                     </Button>
                 </StyledButtonWrapper>
                 <Input secondary className="required" type="text" required="required" title="Kategoria postu" name="category" value={newPost.category} onChange={handleInputChange} />
+                <StyledSelect onChange={handleInputChange} name="section">
+                    <StyledOption value='articles'>
+                        Artykuły
+                    </StyledOption>
+                    <StyledOption value='science'>
+                        Nauka
+                    </StyledOption>
+                    <StyledOption value='noSection'>
+                        Bez sekcji
+                    </StyledOption>
+                </StyledSelect>
+                <StyledLabel>Sekcja</StyledLabel>
+
             </StyledAddForm>
             <StyledButtonContainer>
                 <Button onClick={addNewPost}>Dodaj Post</Button>

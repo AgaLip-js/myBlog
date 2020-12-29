@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import Spinner from "../components/atoms/Spinner";
 import PostCard from "../components/PostCard/PostCard";
-import { getPosts } from "../redux/actions/postActions";
+import { getPosts, setPostLoadingAction } from "../redux/actions/postActions";
 
 const StyledWrapper = styled.div`
     height: 100%;
@@ -24,25 +25,38 @@ const StyledTitle = styled.h2`
     padding: 15px 0;
 `;
 
-const MainView = () => {
+const MainView = ({ categoryView }) => {
     const dispatch = useDispatch();
-    const { posts } = useSelector(store => ({
+    const { posts, loading } = useSelector(store => ({
         posts: store.post.posts,
+        loading: store.post.loading,
     }));
 
     useEffect(() => {
+        dispatch(setPostLoadingAction());
         dispatch(getPosts());
     }, [dispatch]);
+
+    if (loading) { return <Spinner />; }
 
     return (
         <StyledWrapper>
             <StyledTitle>Aktualności</StyledTitle>
             <StyledCardContainer>
-                {posts
+                {posts && categoryView === 'Wszystkie Kategorie'
                     && posts.map(post => (
                         <>
                             <PostCard id={post._id} category={post.category} date={post.date} title={post.title} content={post.content} />
                         </>
+                    ))}
+                {posts && categoryView !== 'Wszystkie Kategorie'
+                    && posts.map(post => (
+                        post.category === categoryView
+                        && (
+                            <>
+                                <PostCard id={post._id} category={post.category} date={post.date} title={post.title} content={post.content} />
+                            </>
+                        )
                     ))}
             </StyledCardContainer>
         </StyledWrapper>

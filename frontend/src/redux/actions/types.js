@@ -18,3 +18,5 @@ export const GET_IMAGES = 'GET_IMAGES';
 export const ADD_CONTENT = 'ADD_CONTENT';
 export const REMOVE_CONTENT = 'REMOVE_CONTENT';
 export const EDIT_CONTENT = 'EDIT_CONTENT';
+export const CATEGORY_LOADING = 'CATEGORY_LOADING';
+export const GET_CATEGORY = 'GET_CATEGORY';

@@ -28,7 +28,8 @@ const StyledNavBar = styled.div`
     }
 `;
 
-const StyledNavItem = styled(NavLink)`
+const StyledNavItem = styled.a`
+    cursor: pointer;
     border: none;
     position: relative;
     display: block;
@@ -141,7 +142,7 @@ const Navbar = () => {
                 <StyledMainImage icon={mainLogo} as={NavLink} to="/" />
             </StyledTopContainer>
             <StyledNavBar props={navBackground} ref={navRef}>
-                <StyledNavItem as={NavLink} to="/" onClick={scrollToTop} props={navBackground}>
+                <StyledNavItem onClick={scrollToTop} props={navBackground}>
                     <StyledMainLogo icon={logo} />
                 </StyledNavItem>
                 <StyledListItemView>

@@ -26,7 +26,6 @@ export const addPost = postData => (dispatch) => {
 
 // Get Posts
 export const getPosts = () => (dispatch) => {
-    dispatch(setPostLoading());
     axios
         .get("/api/posts")
         .then(res => dispatch({
@@ -40,10 +39,11 @@ export const getPosts = () => (dispatch) => {
             },
         }));
 };
-
+export const setPostLoadingAction = () => (dispatch) => {
+    dispatch(setPostLoading());
+};
 // Get Post
 export const getPost = id => (dispatch) => {
-    dispatch(setPostLoading());
     axios
         .get(`/api/posts/${id}`)
         .then(res => dispatch({

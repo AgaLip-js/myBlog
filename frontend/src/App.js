@@ -1,11 +1,13 @@
 import jwtDecode from "jwt-decode";
-import React from "react";
-import { Provider } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import Spinner from "./components/atoms/Spinner";
 import Navbar from "./components/Navbar/Navbar";
 import Rightbar from "./components/Rightbar/Rightbar";
 import { logoutUser, setCurrentUser } from "./redux/actions/authAction";
+import { getPosts, setPostLoadingAction } from "./redux/actions/postActions";
 import store from "./redux/store/store";
 import { PrivateRoute } from "./templates/PrivateRoute";
 import GlobalStyle from "./theme/GlobalStyle";
@@ -38,16 +40,16 @@ function App() {
             window.location.href = "/";
         }
     }
-
+    const [categoryView, setCategoryView] = useState('Wszystkie Kategorie');
     return (
         <>
             <GlobalStyle />
             <ThemeProvider theme={theme}>
                 <BrowserRouter>
                     <Navbar />
-                    <Rightbar />
+                    <Rightbar setCategoryView={setCategoryView} categoryView={categoryView} />
                     <Switch>
-                        <Route exact path="/" component={MainView} />
+                        <Route exact path="/" component={() => <MainView categoryView={categoryView} />} />
                         <Route exact path="/nauka" component={Science} />
                         <Route exact path="/artykuly" component={Articles} />
                         <Route exact path="/o-mnie" component={AboutMe} />

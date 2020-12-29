@@ -14,10 +14,11 @@ const StyledWrapper = styled.div`
 const StyledTitle = styled.p`
     font-size: ${({ theme }) => theme.fontSize.l};
     font-weight: 700;
-    margin-top: 5px;
+    margin: 5px 0;
 `;
 const StyledDateCategory = styled.p`
     font-size: ${({ theme }) => theme.fontSize.xs};
+    margin-top: 0px;
 `;
 const StyledContent = styled.div`
     display: flex;

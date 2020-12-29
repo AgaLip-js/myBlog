@@ -32,6 +32,7 @@ const SunEditorComponent = ({ initialContent, title, onSubmit, editorChange, id,
                     buttonList: [
                         // default
                         ["undo", "redo"],
+                        ["fontSize", "fontColor", "formatBlock"],
                         ["bold", "underline", "italic", "list"],
                         ["table", "link", "image"],
                         ["fullScreen"],

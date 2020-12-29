@@ -9,7 +9,6 @@ export const setImageLoading = () => ({
 
 // Get Image
 export const getImage = name => (dispatch) => {
-    dispatch(setImageLoading());
     axios
         .get(`/files/:${name}`)
         .then(res => dispatch({
@@ -23,10 +22,12 @@ export const getImage = name => (dispatch) => {
             },
         }));
 };
+export const setImageLoadingAction = () => (dispatch) => {
+    dispatch(setImageLoading());
+};
 
 // Get images
 export const getImages = () => (dispatch) => {
-    dispatch(setImageLoading());
     axios
         .get(`/files`)
         .then(res => dispatch({

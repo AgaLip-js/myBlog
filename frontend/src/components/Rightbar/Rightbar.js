@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategory, setCategoryLoadingAction } from '../../redux/actions/categoryActions';
 
 const StyledContainer = styled.div`
 height:100%;
@@ -78,6 +80,25 @@ const StyledIconSection = styled.div`
 `;
 const StyledCategorySection = styled(StyledAboutMeSection)``;
 const StyledNewPostsSection = styled(StyledAboutMeSection)``;
+const StyledSelect = styled.select`
+  outline: none;
+  display: block;
+  background: ${({ theme }) => theme.lightcolor};
+  width: 250px;
+  border: 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 5px 5px;
+  color: ${({ theme }) => theme.blackcolor};
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: ${({ theme }) => theme.font500};
+  line-height: inherit;
+  transition: 0.3s ease;
+  font-size: 14px;
+  border: 1px solid ${({ theme }) => theme.borders};
+`;
+const StyledOption = styled.option``;
 
 const SearchIcon = {
     color: "#fff",
@@ -85,39 +106,74 @@ const SearchIcon = {
     backgroundColor: "transparent",
     fontSize: "18px",
 };
-const Rightbar = () => (
-    <StyledContainer>
-        <StyledInputContainer>
-            <StyledSearchInput placeholder="Wyszukaj" />
-            <StyledButtonIcon type="button">
-                <FontAwesomeIcon icon={faSearch} style={SearchIcon} />
-            </StyledButtonIcon>
-        </StyledInputContainer>
 
-        <StyledAboutMeSection>
-            <StyledTitle>
-                {' '}
-                O blogu
-            </StyledTitle>
-            <StyledText>
-                Cześć, nazywam się Agata Lipiak i właśnie trafiłeś na mojego bloga o programowaniu w języku Javascript.
-                Celem bloga jest dzielenie się wiedzą, nowinkami z świata IT oraz pomoc osobom w rozwijaniu się w kierunku Front-end Developera.
-                {' '}
-            </StyledText>
-            <br />
-            <StyledTitle>
-                {' '}
-                Facebook
-            </StyledTitle>
-            <StyledIconSection />
-        </StyledAboutMeSection>
-        <StyledCategorySection>
-            <StyledTitle>Kategorie</StyledTitle>
-        </StyledCategorySection>
-        <StyledNewPostsSection>
-            <StyledTitle>Najnowsze wpisy</StyledTitle>
-        </StyledNewPostsSection>
-    </StyledContainer>
-);
+const Rightbar = ({ setCategoryView }) => {
+    const dispatch = useDispatch();
+    const { category } = useSelector(store => ({
+        category: store.category.category,
+    }));
+
+    useEffect(() => {
+        dispatch(setCategoryLoadingAction());
+        dispatch(getCategory());
+    }, [dispatch]);
+
+    const returnAllCategoryArray = () => {
+        let categoryArray = [];
+
+        if (category.articles) { categoryArray = [...categoryArray, ...category.articles]; }
+        if (category.science) { categoryArray = [...categoryArray, ...category.science]; }
+        if (category.noSection) { categoryArray = [...categoryArray, ...category.noSection]; }
+
+        return Array.from(new Set(categoryArray));
+    };
+
+    const handleCategoryChange = (e) => {
+        setCategoryView(e.target.value);
+    };
+
+    return (
+        <StyledContainer>
+            <StyledInputContainer>
+                <StyledSearchInput placeholder="Wyszukaj" />
+                <StyledButtonIcon type="button">
+                    <FontAwesomeIcon icon={faSearch} style={SearchIcon} />
+                </StyledButtonIcon>
+            </StyledInputContainer>
+
+            <StyledAboutMeSection>
+                <StyledTitle>
+                    {' '}
+                    O blogu
+                </StyledTitle>
+                <StyledText>
+                    Cześć, nazywam się Agata Lipiak i właśnie trafiłeś na mojego bloga o programowaniu w języku Javascript.
+                    Celem bloga jest dzielenie się wiedzą, nowinkami z świata IT oraz pomoc osobom w rozwijaniu się w kierunku Front-end Developera.
+                    {' '}
+                </StyledText>
+                <br />
+                <StyledTitle>
+                    {' '}
+                    Facebook
+                </StyledTitle>
+                <StyledIconSection />
+            </StyledAboutMeSection>
+            <StyledCategorySection>
+                <StyledTitle>Kategorie</StyledTitle>
+                <StyledSelect onChange={handleCategoryChange} name="section">
+                    <StyledOption value="Wszystkie Kategorie">Wszystkie Kategorie</StyledOption>
+                    {returnAllCategoryArray().map(cat => (
+                        <StyledOption value={cat}>
+                            {cat}
+                        </StyledOption>
+                    ))}
+                </StyledSelect>
+            </StyledCategorySection>
+            <StyledNewPostsSection>
+                <StyledTitle>Najnowsze wpisy</StyledTitle>
+            </StyledNewPostsSection>
+        </StyledContainer>
+    );
+};
 
 export default Rightbar;

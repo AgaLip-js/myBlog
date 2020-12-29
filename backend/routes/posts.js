@@ -56,6 +56,7 @@ router.post(
     title: req.body.title,
     content: req.body.content,
     category: req.body.category,
+    section: req.body.section
     });
 
     newPost.save()
