@@ -43,22 +43,25 @@ router.post(
   '/',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    // const { errors, isValid } = validatePostInput(req.body);
+    //  const { errors, isValid } = validatePostInput(req.body);
 
-    // // Check Validation
-    // if (!isValid) {
-    //   // If any errors, send 400 with errors object
-    //   return res.status(400).json(errors);
-    // }
+    //  // Check Validation
+    //  if (!isValid) {
+    //    // If any errors, send 400 with errors object
+    //    return res.status(400).json({msg: 'Invalid post!'});
+    //  }
 
     const newPost = new Post({
     user: req.user.id,
     title: req.body.title,
     content: req.body.content,
     category: req.body.category,
+    section: req.body.section
     });
 
-    newPost.save().then(post => res.json(post));
+    newPost.save()
+    .then(post => res.json(post))
+    .catch(err => res.status(404).json({message: 'Error! Could not add post'}));
   }
 );
 

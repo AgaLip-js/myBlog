@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const users = require("./routes/users");
 const posts = require("./routes/posts");
+const category = require('./routes/category');
 const passport = require("passport");
 const path = require('path');
 const PORT = process.env.PORT || 5000;
@@ -43,6 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 filesRoutes(app);
 app.use("/api/users", users);
 app.use('/api/posts', posts);
+app.use('/api/category', category);
 
 
 // Server static assets if in production

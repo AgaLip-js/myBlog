@@ -1,18 +1,16 @@
 import { faCamera, faFont } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Quill from "quill";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import SunEditor from "suneditor-react";
 import { v4 as uuidv4 } from "uuid";
+import isEmpty from "../../validation/is-empty";
 import { addContent, editContent, removeContent } from "../../redux/actions/contentAction";
 import { addImage } from "../../redux/actions/imageAction";
 import { addPost } from "../../redux/actions/postActions";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 import InputImg from "../atoms/InputImg";
-import EditorContainer from "../EditorContainer/EditorContainer";
 import SunEditorComponent from "../SunEditor/SunEditor";
 
 const StyledContent = styled.div`
@@ -58,17 +56,59 @@ const StyledContainerForContent = styled.div`
     justify-content: center;
     flex-wrap: wrap;
 `;
+const StyledError = styled.p`
+color: red;
+text-align: center;
+`;
+const StyledSucces = styled.p`
+color: green;
+text-align: center;
+`;
+const StyledSelect = styled.select`
+  outline: none;
+  display: block;
+  background: ${({ theme }) => theme.lightcolor};
+  width: 250px;
+  border: 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 12px 20px;
+  color: ${({ theme }) => theme.blackcolor};
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: ${({ theme }) => theme.font500};
+  line-height: inherit;
+  transition: 0.3s ease;
+  font-size: 14px;
+`;
+const StyledOption = styled.option``;
+const StyledLabel = styled.label`
+  display: block;
+  margin-bottom: 25px;
+  margin-top: 5px;
+  color: ${({ theme }) => theme.blackcolor};
+  font-size: ${({ theme }) => theme.fontSize.xxs};
+  font-weight: ${({ theme }) => theme.font500};
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+`;
 
 const AddPostForm = () => {
     const [fileName, setFileName] = useState([]);
-    const { content, post } = useSelector(store => ({
+    const { content, post, error } = useSelector(store => ({
         content: store.content.content,
         post: store.post.post,
+        error: store.errors.error,
     }));
+
     const contentArray = [];
     const [newContent, setNewContent] = useState(contentArray);
     const dispatch = useDispatch();
     const [selectedFile, setSelectedFile] = useState(null);
+    const [errorMsg, setErrorMsg] = useState('');
+    const [succesMsg, setSuccesMsg] = useState('');
+
     // const [editorText, setEditorText] = useState(null);
 
     const handleAddNewContent = (type) => {
@@ -97,6 +137,7 @@ const AddPostForm = () => {
         content,
         category: "",
         id: uuidv4(),
+        section: '',
     };
 
     const [newPost, setNewPost] = useState(postArray);
@@ -123,6 +164,7 @@ const AddPostForm = () => {
         );
 
         dispatch(editContent(newContent));
+
         // eslint-disable-next-line
     }, [fileName, setFileName]);
 
@@ -142,16 +184,29 @@ const AddPostForm = () => {
     };
 
     const addNewPost = () => {
-        uploadPhotos();
+        if (isEmpty(newPost.title)) {
+            setErrorMsg('Title is empty !');
+        } else if (isEmpty(newPost.category)) {
+            setErrorMsg('Category is empty !');
+        } else if (!newContent.find(nc => nc.object.trim())) {
+            setErrorMsg('Content is empty !');
+        } else if (isEmpty(newPost.section)) {
+            setErrorMsg('Section is empty !');
+        } else {
+            uploadPhotos();
 
-        dispatch(addPost({
-            ...newPost,
-            content: newContent,
-        }));
+            dispatch(addPost({
+                ...newPost,
+                content: newContent,
+            }));
+            setErrorMsg('');
+            setSuccesMsg('The post has been added !');
+            setNewContent(contentArray);
+            setNewPost(postArray);
+        }
     };
 
     const editorChange = (objectContent, id) => {
-        console.log(objectContent);
         setNewContent(
             newContent.map((c) => {
                 if (c.id === id) {
@@ -177,16 +232,11 @@ const AddPostForm = () => {
                         && content.map((c, i) => c.type === "text" ? (
                             <StyledContainerText key={c.id}>
                                 <SunEditorComponent editorChange={editorChange} id={c.id} initialContent="" />
-                                {/* eslint-disable-next-line react/no-danger */}
-                                <div dangerouslySetInnerHTML={{
-                                    __html: c.object,
-                                }}
-                                />
                                 <Button onClick={() => handleRemoveContent(c.id)}>Usuń pole</Button>
                             </StyledContainerText>
                         ) : (
                             <StyledContainerPhoto key={c.id}>
-                                <InputImg name={c.id} fileName={fileName} setFileName={setFileName} setSelectedFile={setSelectedFile} selectedFile={selectedFile} i={i} />
+                                <InputImg name={c.id} fileName={fileName} setFileName={setFileName} setSelectedFile={setSelectedFile} selectedFile={selectedFile} i={i} setErrorMsg={setErrorMsg} />
                                 <Button onClick={() => handleRemoveContent(c.id)}>Usuń zdjęcie</Button>
                             </StyledContainerPhoto>
                         ))}
@@ -213,11 +263,31 @@ const AddPostForm = () => {
                     </Button>
                 </StyledButtonWrapper>
                 <Input secondary className="required" type="text" required="required" title="Kategoria postu" name="category" value={newPost.category} onChange={handleInputChange} />
+                <StyledSelect onChange={handleInputChange} name="section">
+                    <StyledOption value='articles'>
+                        Artykuły
+                    </StyledOption>
+                    <StyledOption value='science'>
+                        Nauka
+                    </StyledOption>
+                    <StyledOption value='noSection'>
+                        Bez sekcji
+                    </StyledOption>
+                </StyledSelect>
+                <StyledLabel>Sekcja</StyledLabel>
+
             </StyledAddForm>
             <StyledButtonContainer>
                 <Button onClick={addNewPost}>Dodaj Post</Button>
                 <Button onClick={uploadPhotos}>Dodaj zdjęcia</Button>
             </StyledButtonContainer>
+            {errorMsg
+                ? <StyledError>{errorMsg}</StyledError>
+                : null}
+            {succesMsg
+                ? <StyledSucces>{succesMsg}</StyledSucces>
+                : null}
+
         </StyledContent>
     );
 };
