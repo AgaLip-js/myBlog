@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router";
 import styled from "styled-components";
 import LoadingSpinner from "../components/atoms/LoadingSpinner";
 import Spinner from "../components/atoms/Spinner";
 
 import SunEditorComponent from "../components/SunEditor/SunEditor";
+import { setSelectedCategory } from "../redux/actions/globalActions";
 import { getImages, setImageLoadingAction } from "../redux/actions/imageAction";
-import { getPost, setPostLoadingAction } from "../redux/actions/postActions";
+import { clearPost, getPost, setPostLoadingAction } from "../redux/actions/postActions";
+import history from "../templates/history";
 
 const StyledWrapper = styled.div`
     height: 100%;
@@ -54,25 +57,39 @@ const PostView = ({ match }) => {
         loadingPost: store.post.loading,
     }));
 
+    const { category, searchText } = useSelector(({ common }) => ({
+        category: common.category,
+        searchText: common.searchText,
+    }));
+
     useEffect(() => {
-        console.log("Loading indicator");
         dispatch(setPostLoadingAction());
         dispatch(setImageLoadingAction());
-        setTimeout(() => {
-            console.log("Loading post");
-            dispatch(getPost(match.params.id));
-            dispatch(getImages());
-        }, 500);
 
+        dispatch(getPost(match.params.id));
+        dispatch(getImages());
+        return () => {
+            dispatch(clearPost());
+        };
         // eslint-disable-next-line
     }, [dispatch, match.params.id]);
 
     const getImgUrl = image => images.filter(img => img.name === image);
-    console.log("Loading");
-    console.log(loadingImg);
-    console.log(loadingPost);
 
-    if (loadingImg || loadingPost) { return <Spinner />; }
+    if (loadingImg || loadingPost || !post || !images) { return <Spinner />; }
+
+    // if (category !== 'all categories' || searchText !== '') {
+    //     const mainLocation = {
+    //         pathname: '/',
+    //         state: {
+    //             fromDashboard: true,
+    //         },
+    //     };
+
+    //     history.push(mainLocation);
+    //     history.replace(mainLocation);
+    //     return <Redirect to={mainLocation} />;
+    // }
 
     return (
         <StyledWrapper>

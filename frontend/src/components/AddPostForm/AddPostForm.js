@@ -264,14 +264,14 @@ const AddPostForm = () => {
                 </StyledButtonWrapper>
                 <Input secondary className="required" type="text" required="required" title="Kategoria postu" name="category" value={newPost.category} onChange={handleInputChange} />
                 <StyledSelect onChange={handleInputChange} name="section">
-                    <StyledOption value='articles'>
+                    <StyledOption value='artykuly'>
                         Artykuły
                     </StyledOption>
-                    <StyledOption value='science'>
+                    <StyledOption value='nauka'>
                         Nauka
                     </StyledOption>
-                    <StyledOption value='noSection'>
-                        Bez sekcji
+                    <StyledOption value='inne'>
+                        Inne
                     </StyledOption>
                 </StyledSelect>
                 <StyledLabel>Sekcja</StyledLabel>
