@@ -57,7 +57,6 @@ const PostView = ({ match }) => {
         dispatch(setPostLoadingAction());
         dispatch(setImageLoadingAction());
         setTimeout(() => {
-            console.log("Loading post");
             dispatch(getPost(match.params.id));
             dispatch(getImages());
         }, 500);
@@ -66,14 +65,10 @@ const PostView = ({ match }) => {
     }, [dispatch, match.params.id]);
 
     const getImgUrl = image => images.filter(img => img.name === image);
-    console.log("Loading");
-    console.log(loadingImg);
-    console.log(loadingPost);
 
     if (loadingImg || loadingPost) {
         return <Spinner />;
     }
-
     return (
         <StyledWrapper>
             <StyledHeader>{post.title}</StyledHeader>
@@ -92,7 +87,7 @@ const PostView = ({ match }) => {
                         <StyledImg src={`${getImgUrl(c.object)[0].url}`} />
                     ) : null)}
             </StyledContainerForContent>
-            <Comments />
+            <Comments postId={post._id} />
         </StyledWrapper>
     );
 };

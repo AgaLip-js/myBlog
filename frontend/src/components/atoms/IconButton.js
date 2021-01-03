@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import styled, { css } from 'styled-components';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import styled, { css } from "styled-components";
 
 const PositionButton = styled.button`
     display: flex;
@@ -76,13 +76,10 @@ const ButtonIconTitle = ({ icon, iconSize, color, iconTransform, title }) => (
     </>
 );
 
-const IconButton = ({ ...props }) => {
-    console.log("X");
-    return (
-        <NoBorderButton {...props}>
-            <ButtonIconTitle {...props} />
-        </NoBorderButton>
-    );
-};
+const IconButton = ({ ...props }) => (
+    <NoBorderButton {...props}>
+        <ButtonIconTitle {...props} />
+    </NoBorderButton>
+);
 
 export default IconButton;

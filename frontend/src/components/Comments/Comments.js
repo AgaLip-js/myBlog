@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { getComments } from "../../redux/actions/commentActions";
 import AddNewCommentForm from "./AddNewCommentForm";
 import SingleComment from "./SingleComment";
 
@@ -42,7 +44,7 @@ const commentsOb = [
                 reactions: [
                     {
                         name: "Like",
-                        count: 20,
+                        count: 0,
                     },
                     {
                         name: "Laught",
@@ -90,15 +92,22 @@ const commentsOb = [
     },
 ];
 
-const Comments = () => {
-    console.log("XX");
+const Comments = ({ postId }) => {
+    const { comments } = useSelector(({ post }) => ({
+        comments: post.comments,
+    }));
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getComments(postId));
+    }, [dispatch]);
 
     return (
         <StyledComentsWrapper>
-            <AddNewCommentForm />
+            <AddNewCommentForm postId={postId} />
             <StyledUserCommentsList>
-                {commentsOb.map(c => (
-                    <SingleComment key={c.id} level={1} {...c} />
+                {comments.map(c => (
+                    <SingleComment postId={postId} key={c._id} level={1} {...c} />
                 ))}
             </StyledUserCommentsList>
         </StyledComentsWrapper>

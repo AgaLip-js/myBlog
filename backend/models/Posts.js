@@ -32,6 +32,11 @@ user: {
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  comments: [
+    {type : Schema.Types.ObjectId, ref : 'comments'}
+  ],
 });
+
+
 module.exports = mongoose.model("posts", PostsSchema, "posts");

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { addComment, addReply } from "../../redux/actions/commentActions";
 import Button from "../atoms/Button";
 import CommentInput from "../atoms/CommentInput";
 
@@ -36,7 +37,7 @@ const ContinueAsGuest = styled.div`
     row-gap: 5px;
 `;
 
-const AddNewCommentForm = () => {
+const AddNewCommentForm = ({ postId, commentId, setToogleReplyVisible }) => {
     const dispatch = useDispatch();
     const [commentText, setCommentText] = useState("");
     const [name, setName] = useState("");
@@ -45,7 +46,17 @@ const AddNewCommentForm = () => {
     const isKnownUser = false;
 
     const handleButtonClick = () => {
-        console.log("should be disabled");
+        const commentData = {
+            name,
+            commentText,
+            user: "GUEST",
+        };
+        if (commentId) {
+            dispatch(addReply(postId, commentId, commentData));
+            setToogleReplyVisible(false);
+        } else {
+            dispatch(addComment(postId, commentData));
+        }
     };
 
     const handleNameAndCheckIfAlreadyExists = (v) => {

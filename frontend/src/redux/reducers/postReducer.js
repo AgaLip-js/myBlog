@@ -1,3 +1,4 @@
+import { ADD_NEW_COMMENT, ADD_NEW_REPLY, ADD_REACTION, GET_ALL_COMMENTS } from "../actions/commentActions";
 import { ADD_POST, GET_POSTS, GET_POST, DELETE_POST, POST_LOADING } from "../actions/types";
 
 const initialState = {
@@ -5,7 +6,55 @@ const initialState = {
     post: {
     },
     loading: false,
+    loadingComments: false,
+    comments: [],
 };
+
+const findAndReplaceObject = (comments, objectToReplace) => {
+    const co = comments.reduce((acc, currComment) => {
+        if (currComment._id === objectToReplace._id) {
+            return [...acc, objectToReplace];
+        }
+        if (currComment.comments.length) {
+            const commentsChild = findAndReplaceObject(currComment.comments, objectToReplace);
+            return [
+                ...acc,
+                {
+                    ...currComment,
+                    comments: commentsChild,
+                },
+            ];
+        }
+        return [...acc, currComment];
+    }, []);
+    return co;
+};
+const findAndAddObject = (comments, commentId, objectToAdd) => {
+    const co = comments.reduce((acc, currComment) => {
+        if (currComment._id === commentId) {
+            return [
+                ...acc,
+                {
+                    ...currComment,
+                    comments: [...currComment.comments, objectToAdd],
+                },
+            ];
+        }
+        if (currComment.comments.length) {
+            const commentsChild = findAndAddObject(currComment.comments, commentId, objectToAdd);
+            return [
+                ...acc,
+                {
+                    ...currComment,
+                    comments: commentsChild,
+                },
+            ];
+        }
+        return [...acc, currComment];
+    }, []);
+    return co;
+};
+
 const postReducer = (state = initialState, action) => {
     switch (action.type) {
         case POST_LOADING:
@@ -35,6 +84,29 @@ const postReducer = (state = initialState, action) => {
                 ...state,
                 posts: state.posts.filter(post => post._id !== action.payload),
             };
+        case ADD_NEW_COMMENT:
+            return {
+                ...state,
+                comments: [...state.comments, action.payload.comment],
+            };
+        case ADD_REACTION: {
+            return {
+                ...state,
+                comments: findAndReplaceObject(state.comments, action.payload.comment),
+            };
+        }
+        case ADD_NEW_REPLY: {
+            return {
+                ...state,
+                comments: findAndAddObject(state.comments, action.payload.commentId, action.payload.comment),
+            };
+        }
+        case GET_ALL_COMMENTS:
+            return {
+                ...state,
+                comments: action.payload.comments,
+            };
+
         default:
             return state;
     }

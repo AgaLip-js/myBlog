@@ -2,7 +2,9 @@ import { faFrown, faGrinSquintTears, faHeart, faSmile, faThumbsUp, faUser } from
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import React, { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { addReactionAction } from "../../redux/actions/commentActions";
 import IconButton from "../atoms/IconButton";
 import Popover from "../atoms/Popover";
 import StyledDotSeparator from "../atoms/StyledDotSeparator";
@@ -99,18 +101,25 @@ const reactionTypes = [
     },
 ];
 
-const ReactionsMenu = () => (
-    <StyledReactionsMenu>
-        {reactionTypes.map(({ name, color, icon }) => (
-            <IconButton key={name} color={color} icon={icon} iconSize="2x" />
-        ))}
-    </StyledReactionsMenu>
-);
+const ReactionsMenu = ({ commentId, openPopover }) => {
+    const dispatch = useDispatch();
+    const handleReactionClick = (name) => {
+        dispatch(addReactionAction(commentId, name));
+        openPopover(false);
+        // dispatch(simulateAddReaction());
+    };
+    return (
+        <StyledReactionsMenu>
+            {reactionTypes.map(({ name, color, icon }) => (
+                <IconButton key={name} color={color} icon={icon} iconSize="2x" onClick={() => handleReactionClick(name)} />
+            ))}
+        </StyledReactionsMenu>
+    );
+};
 
 const CommentReactions = ({ reactions }) => {
     const amount = reactions.reduce((psum, a) => psum + a.count, 0);
 
-    console.log("reactions:");
     return (
         <div
             style={{
@@ -121,7 +130,20 @@ const CommentReactions = ({ reactions }) => {
         >
             {reactions.map(({ name, count }) => {
                 const reactionOb = reactionTypes.find(el => el.name === name);
-                return <FontAwesomeIcon icon={reactionOb.icon} color={reactionOb.color} size="sm" />;
+                if (count > 0) {
+                    return (
+                        <FontAwesomeIcon
+                            key={name}
+                            icon={reactionOb.icon}
+                            color={reactionOb.color}
+                            size="sm"
+                            style={{
+                                margin: "auto",
+                            }}
+                        />
+                    );
+                }
+                return null;
             })}
             <span>{amount}</span>
         </div>
@@ -135,8 +157,8 @@ CommentReactions.propTypes = {
         }),
     ),
 };
-const SingleComment = ({ level, userName, updateDate, commentText, reactions, id, subComments }) => {
-    const [restartPopover, setRestartPopover] = useState(false);
+const SingleComment = ({ postId, level, name, updateDate, commentText, reactions, _id, comments }) => {
+    const [isPopoverVisible, openPopover] = useState(false);
     const recommendRef = useRef(null);
     const [toggleReplyVisible, setToogleReplyVisible] = useState(false);
 
@@ -155,9 +177,9 @@ const SingleComment = ({ level, userName, updateDate, commentText, reactions, id
             />
             <div>
                 <StyledTitleWrapper>
-                    <StyledCommentTitle>{userName}</StyledCommentTitle>
+                    <StyledCommentTitle>{name}</StyledCommentTitle>
                     <StyledDotSeparator />
-                    <StyledSpan>{formatDate(updateDate)}</StyledSpan>
+                    <StyledSpan>{formatDate(new Date(updateDate))}</StyledSpan>
                 </StyledTitleWrapper>
                 <StyledCommentText>{commentText}</StyledCommentText>
                 <StyledCommentFooter>
@@ -167,25 +189,25 @@ const SingleComment = ({ level, userName, updateDate, commentText, reactions, id
                             <StyledDotSeparator />
                         </>
                     )}
-                    <Popover option="click" showPopper={restartPopover} setShowPopper={setRestartPopover}>
+                    <Popover option="click" showPopper={isPopoverVisible} setShowPopper={openPopover}>
                         <StyledSpan clickable ref={recommendRef} sizeType="headers" size="xxs" margin="auto 5px 1px auto">
                             Poleć
                         </StyledSpan>
-                        <ReactionsMenu />
+                        <ReactionsMenu openPopover={openPopover} commentId={_id} />
                     </Popover>
                     <VerticalDivider />
                     <StyledSpan clickable isActive={toggleReplyVisible} onClick={() => setToogleReplyVisible(!toggleReplyVisible)}>
                         Odpowiedz
                     </StyledSpan>
                 </StyledCommentFooter>
-                {subComments && subComments.length > 0 && (
+                {toggleReplyVisible && <AddNewCommentForm setToogleReplyVisible={setToogleReplyVisible} postId={postId} commentId={_id} />}
+                {comments && comments.length > 0 && (
                     <StyledSubComments>
-                        {subComments.map(c => (
-                            <SingleComment key={c.id} isThread level={level + 1} {...c} />
+                        {comments.map(c => (
+                            <SingleComment key={c.id} postId={postId} isThread level={level + 1} {...c} />
                         ))}
                     </StyledSubComments>
                 )}
-                {toggleReplyVisible && <AddNewCommentForm />}
             </div>
         </StyleSingleCommentWrapper>
     );
@@ -193,9 +215,9 @@ const SingleComment = ({ level, userName, updateDate, commentText, reactions, id
 
 SingleComment.propTypes = {
     isThread: PropTypes.bool,
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     name: PropTypes.string,
-    updateDate: PropTypes.instanceOf(Date),
+    updateDate: PropTypes.string,
     commentText: PropTypes.string,
     reactions: PropTypes.arrayOf(
         PropTypes.shape({
@@ -203,24 +225,7 @@ SingleComment.propTypes = {
             count: PropTypes.number,
         }),
     ),
-    subComments: PropTypes.arrayOf(
-        PropTypes.shape({
-            isThread: PropTypes.bool,
-            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-            name: PropTypes.string,
-            updateDate: PropTypes.date,
-            commentText: PropTypes.string,
-            reactions: PropTypes.arrayOf(
-                PropTypes.shape({
-                    name: PropTypes.string,
-                    count: PropTypes.number,
-                }),
-            ),
-        }),
-    ),
-};
-SingleComment.defaultProps = {
-    isThread: false,
+    comments: PropTypes.oneOfType([PropTypes.object]),
 };
 
 export default SingleComment;
