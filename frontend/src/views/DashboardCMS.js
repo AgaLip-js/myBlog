@@ -10,7 +10,8 @@ import store from "../redux/store/store";
 const StyledWrapper = styled.div`
     position: relative;
     height: 100%;
-    width: 70%;
+    width: 90%;
+    margin: 0 5%;
 `;
 const StyledLogout = styled(NavLink)`
     text-decoration: none;

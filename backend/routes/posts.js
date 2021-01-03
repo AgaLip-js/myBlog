@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const passport = require("passport");
 
 // Post model
@@ -18,11 +18,83 @@ router.get("/test", (req, res) => res.json({ msg: "Posts Works" }));
 // @route   GET api/posts
 // @desc    Get posts
 // @access  Public
-router.get("/", (req, res) => {
+router.post("/", (req, res) => {
+  console.log(req.body);
+  const start = req.body.start;
+  console.log(start);
+  const count = req.body.count;
+  console.log(count);
   Post.find()
     .sort({ date: -1 })
-    .then((posts) => res.json(posts))
+    .skip(start - 1)
+    .limit(count)
+    .then((posts) => {
+      console.log(posts);
+      res.json(posts);
+    })
     .catch((err) => res.status(404).json({ nopostsfound: "No posts found" }));
+});
+
+//@route   GET api/posts/newestPosts/:section
+//@desc    Get posts
+//@access  Public
+
+router.get("/newestPosts/:section", (req, res) => {
+  const section = req.params.section;
+  if (section === "mainView") {
+    Post.find({}, { title: 1 })
+      .sort({ date: -1 })
+      .limit(5)
+      .then((post) => {
+        console.log(post);
+        res.json(post);
+      })
+      .catch((err) => res.status(404).json({ nopostsfound: "No post found " }));
+  } else {
+    Post.find({ section: section }, { title: 1 })
+      .sort({ date: -1 })
+      .limit(5)
+      .then((post) => {
+        console.log(post);
+        res.json(post);
+      })
+      .catch((err) => res.status(404).json({ nopostsfound: "No post found " }));
+  }
+});
+
+// @route   GET api/posts/:section
+// @desc    Get posts
+// @access  Public
+router.get("/:section/:category", (req, res) => {
+  const section = req.params.section;
+  const category = req.params.category;
+  console.log("section: ");
+  console.log(section);
+
+  console.log("category: ");
+  console.log(category);
+
+  if (category === "all categories") {
+    Post.find({ section: section })
+      .sort({ date: -1 })
+      .then((post) => {
+        console.log(post);
+        res.json(post);
+      })
+      .catch((err) =>
+        res.status(404).json({ nopostsfound: "No post found for that section" })
+      );
+  } else {
+    Post.find({ section, category })
+      .sort({ date: -1 })
+      .then((post) => {
+        console.log(post);
+        res.json(post);
+      })
+      .catch((err) =>
+        res.status(404).json({ nopostsfound: "No post found for that section" })
+      );
+  }
 });
 
 // @route   GET api/posts/:id

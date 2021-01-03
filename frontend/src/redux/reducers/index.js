@@ -5,6 +5,7 @@ import imageReducer from './imageReducer';
 import contentReducer from "./contentReducer";
 import errorReducer from "./errorReducer";
 import categoryReducer from "./categoryReducer";
+import commonReducer from "./commonReducer";
 
 export default combineReducers({
     post: postReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
     content: contentReducer,
     errors: errorReducer,
     category: categoryReducer,
+    common: commonReducer,
 });

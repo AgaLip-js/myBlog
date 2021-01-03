@@ -9,7 +9,8 @@ const StyledLoginWrapper = styled.div`
   height: 60vh;
   display: flex;
   justify-content: center;
-  width: 70%;
+  width: 90%;
+    margin: 0 5%;
     align-items: center;
 `;
 

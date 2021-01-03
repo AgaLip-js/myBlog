@@ -1,8 +1,7 @@
-import { GET_CATEGORY, CATEGORY_LOADING } from "../actions/types";
+import { GET_ALL_CATEGORIES, CATEGORY_LOADING, GET_CATEGORY_FOR_SECTION } from "../actions/types";
 
 const initialState = {
-    category: {
-    },
+    categories: null,
     loading: false,
 };
 
@@ -13,10 +12,16 @@ const categoryReducer = (state = initialState, action) => {
                 ...state,
                 loading: true,
             };
-        case GET_CATEGORY:
+        case GET_ALL_CATEGORIES:
             return {
                 ...state,
-                category: action.payload,
+                categories: action.payload.categories,
+                loading: false,
+            };
+        case GET_CATEGORY_FOR_SECTION:
+            return {
+                ...state,
+                categories: action.payload,
                 loading: false,
             };
         default:

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Spinner from "../components/atoms/Spinner";
 import Comments from "../components/Comments/Comments";
 import { getImages, setImageLoadingAction } from "../redux/actions/imageAction";
-import { getPost, setPostLoadingAction } from "../redux/actions/postActions";
+import { clearPost, getPost, setPostLoadingAction } from "../redux/actions/postActions";
 
 const StyledWrapper = styled.div`
     height: 100%;
@@ -52,19 +52,39 @@ const PostView = ({ match }) => {
         loadingPost: store.post.loading,
     }));
 
+    const { category, searchText } = useSelector(({ common }) => ({
+        category: common.category,
+        searchText: common.searchText,
+    }));
+
     useEffect(() => {
-        console.log("Loading indicator");
         dispatch(setPostLoadingAction());
         dispatch(setImageLoadingAction());
-        setTimeout(() => {
-            dispatch(getPost(match.params.id));
-            dispatch(getImages());
-        }, 500);
 
+        dispatch(getPost(match.params.id));
+        dispatch(getImages());
+        return () => {
+            dispatch(clearPost());
+        };
         // eslint-disable-next-line
     }, [dispatch, match.params.id]);
 
     const getImgUrl = image => images.filter(img => img.name === image);
+
+    if (loadingImg || loadingPost || !post || !images) { return <Spinner />; }
+
+    // if (category !== 'all categories' || searchText !== '') {
+    //     const mainLocation = {
+    //         pathname: '/',
+    //         state: {
+    //             fromDashboard: true,
+    //         },
+    //     };
+
+    //     history.push(mainLocation);
+    //     history.replace(mainLocation);
+    //     return <Redirect to={mainLocation} />;
+    // }
 
     if (loadingImg || loadingPost) {
         return <Spinner />;

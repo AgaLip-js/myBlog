@@ -1,10 +1,11 @@
 import { ADD_NEW_COMMENT, ADD_NEW_REPLY, ADD_REACTION, GET_ALL_COMMENTS } from "../actions/commentActions";
-import { ADD_POST, GET_POSTS, GET_POST, DELETE_POST, POST_LOADING } from "../actions/types";
+import { ADD_POST, GET_POSTS, GET_POST, DELETE_POST, POST_LOADING, GET_POSTS_BY_SECTION, GET_POSTS_BY_CATEGORY, GET_NEWEST_POSTS_BY_SECTION, CLEAR_POSTS, CLEAR_POST } from "../actions/types";
 
 const initialState = {
     posts: [],
     post: {
     },
+    newestPosts: [],
     loading: false,
     loadingComments: false,
     comments: [],
@@ -62,6 +63,17 @@ const postReducer = (state = initialState, action) => {
                 ...state,
                 loading: true,
             };
+        case CLEAR_POSTS:
+            return {
+                ...state,
+                posts: [],
+            };
+        case CLEAR_POST:
+            return {
+                ...state,
+                post: {
+                },
+            };
         case GET_POSTS:
             return {
                 ...state,
@@ -72,6 +84,24 @@ const postReducer = (state = initialState, action) => {
             return {
                 ...state,
                 post: action.payload,
+                loading: false,
+            };
+        case GET_POSTS_BY_SECTION:
+            return {
+                ...state,
+                posts: action.payload,
+                loading: false,
+            };
+        case GET_POSTS_BY_CATEGORY:
+            return {
+                ...state,
+                posts: action.payload,
+                loading: false,
+            };
+        case GET_NEWEST_POSTS_BY_SECTION:
+            return {
+                ...state,
+                newestPosts: action.payload,
                 loading: false,
             };
         case ADD_POST:
