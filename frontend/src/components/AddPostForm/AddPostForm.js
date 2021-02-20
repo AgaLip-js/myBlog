@@ -1,17 +1,18 @@
 import { faCamera, faFont } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import isEmpty from "../../validation/is-empty";
 import { addContent, editContent, removeContent } from "../../redux/actions/contentAction";
 import { addImage } from "../../redux/actions/imageAction";
-import { addPost } from "../../redux/actions/postActions";
+import { addPost, getPost } from "../../redux/actions/postActions";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 import InputImg from "../atoms/InputImg";
 import SunEditorComponent from "../SunEditor/SunEditor";
+import SelectPosts from "../atoms/SelectPosts";
 
 const StyledContent = styled.div`
     display: flex;
@@ -94,11 +95,13 @@ const StyledLabel = styled.label`
   letter-spacing: 0.2em;
 `;
 
-const AddPostForm = () => {
-    const { content } = useSelector(store => ({
+const AddPostForm = ({ option }) => {
+    const { content, post } = useSelector(store => ({
         content: store.content.content,
+        post: store.post.post,
     }));
 
+    const [selectedPost, setSelectedPost] = useState(null);
     const [fileName, setFileName] = useState([]);
     const [mainPhoto, setMainPhoto] = useState([]);
     const contentArray = [];
@@ -225,10 +228,21 @@ const AddPostForm = () => {
         dispatch(editContent(newContent));
     };
 
+    const handlePostChange = (e) => {
+        dispatch(getPost(e.target.value));
+        setSelectedPost(e.target.value);
+    };
+
     return (
         <StyledContent>
-            <StyledTitle> Dodaj Post </StyledTitle>
+            <StyledTitle>
+                {' '}
+                {option === 'add' ? 'Dodaj Post' : 'Edytuj Post'}
+                {' '}
+            </StyledTitle>
             <StyledAddForm>
+                {option === 'edit'
+                && <SelectPosts handlePostChange={handlePostChange} />}
                 <Input secondary className="required" type="text" required="required" title="Tytuł postu" name="title" value={newPost.title} onChange={handleInputChange} />
 
                 <InputImg
@@ -277,6 +291,7 @@ const AddPostForm = () => {
                 </StyledButtonWrapper>
                 <Input secondary className="required" type="text" required="required" title="Kategoria postu" name="category" value={newPost.category} onChange={handleInputChange} />
                 <StyledSelect onChange={handleInputChange} name="section">
+                    <StyledOption hidden selected>Select section...</StyledOption>
                     <StyledOption value='artykuly'>
                         Artykuły
                     </StyledOption>
@@ -300,7 +315,6 @@ const AddPostForm = () => {
             {succesMsg
                 ? <StyledSucces>{succesMsg}</StyledSucces>
                 : null}
-
         </StyledContent>
     );
 };

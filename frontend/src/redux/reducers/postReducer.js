@@ -8,7 +8,7 @@ import { ADD_POST,
     CLEAR_POST,
     GET_POSTS_BY_SECTION_AND_CATEGORY,
     SEARCH_POSTS,
-    GET_MORE_POSTS_BY_CATEGORY, EDIT_POST } from "../actions/types";
+    GET_MORE_POSTS_BY_CATEGORY, EDIT_POST, GET_POSTS } from "../actions/types";
 
 const initialState = {
     posts: [],
@@ -93,6 +93,12 @@ const postReducer = (state = initialState, action) => {
                 ...state,
                 posts: [...state.posts, ...action.payload],
                 start: state.start + state.count,
+                loading: false,
+            };
+        case GET_POSTS:
+            return {
+                ...state,
+                posts: action.payload,
                 loading: false,
             };
         case GET_POST:

@@ -1,11 +1,12 @@
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import AddPostForm from "../components/AddPostForm/AddPostForm";
 import { logoutUser } from "../redux/actions/authAction";
 import store from "../redux/store/store";
+import Button from '../components/atoms/Button';
 
 const StyledWrapper = styled.div`
     position: relative;
@@ -30,10 +31,21 @@ const StyledTopContent = styled.div`
     justify-content: space-between;
     align-items: center;
 `;
+const StyledContentWrapper = styled.div`
+display: flex;
+flex-direction: column;
+`;
+const StyledButtonWrapper = styled.div`
+display: flex;
+justify-content: center;
+`;
+
 const DashboardCMS = () => {
     const logoutFn = () => {
         store.dispatch(logoutUser());
     };
+
+    const [option, setOption] = useState('add');
 
     return (
         <StyledWrapper>
@@ -50,7 +62,13 @@ const DashboardCMS = () => {
                     />
                 </StyledLogout>
             </StyledTopContent>
-            <AddPostForm />
+            <StyledContentWrapper>
+                <StyledButtonWrapper>
+                    <Button onClick={() => setOption('add')}>Dodaj Post</Button>
+                    <Button onClick={() => setOption('edit')}>Edytuj Post</Button>
+                </StyledButtonWrapper>
+                <AddPostForm option={option} />
+            </StyledContentWrapper>
         </StyledWrapper>
     );
 };

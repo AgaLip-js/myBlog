@@ -196,16 +196,40 @@ router.post(
   }
 );
 
+// @route   PUT api/posts
+// @desc    Edit post
+// @access  Private
+router.put(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+
+    const editPost = new Post({
+    user: req.user.id,
+    title: req.body.title,
+    mainPhoto: req.body.mainPhoto,
+    content: req.body.content,
+    category: req.body.category,
+    section: req.body.section
+    });
+
+    Post.findOneAndUpdate({_id:req.params.id}, editPost, {upsert:true, new:true}, function(err, result){
+      if(err){
+          res.send(err)
+      }
+      else{
+          res.send(result)
+      }
+  })
+  }
+);
+
 // @route   GET api/posts
 // @desc    Get posts
 // @access  Public
-router.post("/", (req, res) => {
-  const start = req.body.start;
-  const count = req.body.count;
+router.get("/", (req, res) => {
   Post.find()
     .sort({ date: -1 })
-    .skip(start - 1)
-    .limit(count)
     .then((posts) => {
       res.json(posts);
     })
