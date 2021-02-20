@@ -28,3 +28,4 @@ export const CLEAR_POSTS = 'CLEAR_POSTS';
 export const CLEAR_POST = 'CLEAR_POST';
 export const SEARCH_POSTS = 'SEARCH_POSTS';
 export const GET_MORE_POSTS_BY_CATEGORY = 'GET_MORE_POSTS_BY_CATEGORY';
+export const EDIT_POST = 'EDIT_POST';

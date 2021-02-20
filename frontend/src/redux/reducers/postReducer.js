@@ -1,7 +1,7 @@
 import { ADD_POST, GET_POST, DELETE_POST, POST_LOADING, GET_NEWEST_POSTS_BY_SECTION, CLEAR_POSTS, CLEAR_POST,
     GET_POSTS_BY_SECTION_AND_CATEGORY,
     SEARCH_POSTS,
-    GET_MORE_POSTS_BY_CATEGORY } from "../actions/types";
+    GET_MORE_POSTS_BY_CATEGORY, EDIT_POST } from "../actions/types";
 
 const initialState = {
     posts: [],
@@ -68,8 +68,17 @@ const postReducer = (state = initialState, action) => {
             return {
                 ...state,
                 posts: [...state.posts, action.payload],
-                start: state.start + state.count,
-                loading: false,
+            };
+
+        case EDIT_POST:
+            return {
+                ...state,
+                posts: state.posts.map((post) => {
+                    if (post.id === action.payload.editedPost.id) {
+                        return action.payload.editedPost;
+                    }
+                    return post;
+                }),
             };
         case DELETE_POST:
             return {

@@ -38,6 +38,30 @@ export const addPost = postData => (dispatch) => {
         .catch(err => dispatch(returnErrors(err.response.data, err.response.status)));
 };
 
+export const editPost = (id, newPost) => (dispatch) => {
+    const editedPost = {
+        title: newPost.title,
+        category: newPost.category,
+        quantity: newPost.quantity,
+        date: newPost.date,
+        type: newPost.type,
+        id,
+    };
+    axios
+        .put(`/api/posts${id}`, editedPost)
+        .then(() => {
+            dispatch({
+                type: EDIT_POST,
+                payload: {
+                    editedPost,
+                },
+            });
+        })
+
+        .catch((err) => {
+            console.error(err.message);
+        });
+};
 // Get Posts
 // export const getPosts = data => (dispatch) => {
 //     axios
