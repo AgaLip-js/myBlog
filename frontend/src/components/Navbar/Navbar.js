@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/developer.png";
 import mainLogo from "../../assets/logo.jpg";
+import { clearCategory, handleSearchValue } from "../../redux/actions/globalActions";
+import history from "../../templates/history";
+import { useOnClickOutside } from "../../utils/hooks";
+import Burger from "../atoms/Burger/Burger";
+import SearchInput from "../atoms/SearchInput/SearchInput";
+import Menu from "../MenuBurger/MenuBurger";
 
 const StyledTopContainer = styled.div`
     height: 200px;
@@ -35,6 +42,7 @@ const StyledNavItem = styled.a`
     display: block;
     transform: ${({ props }) => (props ? "translateX(0%)" : "translateX(-150%)")};
     transition: transform 0.3s linear;
+    margin-right: auto;
 `;
 const StyledMainImage = styled.div`
     background: url(${({ icon }) => icon});
@@ -43,6 +51,7 @@ const StyledMainImage = styled.div`
     display: block;
     width: 600px;
     height: 115px;
+    cursor:pointer;
 `;
 
 const StyledMainLogo = styled.div`
@@ -119,6 +128,7 @@ const Navbar = () => {
     const [navBackground, setNavBackground] = useState(false);
     const navRef = useRef();
     navRef.current = navBackground;
+
     useEffect(() => {
         const handleScroll = () => {
             const show = window.scrollY >= 200;
@@ -127,6 +137,10 @@ const Navbar = () => {
             }
         };
         window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
     }, []);
 
     const scrollToTop = () => {
@@ -135,16 +149,38 @@ const Navbar = () => {
             behavior: "smooth",
         });
     };
+    const setNewLocation = {
+        pathname: '/',
+        state: {
+            clickOnLogo: true,
+        },
+    };
+    const dispatch = useDispatch();
+
+    const handleClick = () => {
+        dispatch(clearCategory());
+        dispatch(handleSearchValue(''));
+        history.push(setNewLocation);
+    };
+    const [open, setOpen] = React.useState(false);
+    const node = React.useRef();
+    useOnClickOutside(node, () => setOpen(false));
 
     return (
         <>
             <StyledTopContainer>
-                <StyledMainImage icon={mainLogo} as={NavLink} to="/" />
+                <StyledMainImage icon={mainLogo} onClick={handleClick} />
             </StyledTopContainer>
             <StyledNavBar props={navBackground} ref={navRef}>
+                <div ref={node}>
+                    <Burger open={open} setOpen={setOpen} />
+                    <Menu open={open} setOpen={setOpen} />
+                </div>
+
                 <StyledNavItem onClick={scrollToTop} props={navBackground}>
                     <StyledMainLogo icon={logo} />
                 </StyledNavItem>
+                <SearchInput secondary />
                 <StyledListItemView>
                     <StyledItemView as={NavLink} to="/nauka" activeclass="active">
                         Nauka

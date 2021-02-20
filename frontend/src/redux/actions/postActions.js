@@ -1,7 +1,7 @@
 import axios from "axios";
 import { returnErrors } from "./errorAction";
-import { ADD_POST, CLEAR_ERRORS, DELETE_POST, GET_ERRORS, GET_POST, GET_POSTS, POST_LOADING,
-    GET_POSTS_BY_SECTION, GET_POSTS_BY_CATEGORY, GET_NEWEST_POSTS_BY_SECTION, CLEAR_POSTS, CLEAR_POST } from "./types";
+import { ADD_POST, CLEAR_ERRORS, DELETE_POST, GET_ERRORS, GET_POST, POST_LOADING,
+    GET_POSTS_BY_SECTION_AND_CATEGORY, GET_MORE_POSTS_BY_CATEGORY, GET_NEWEST_POSTS_BY_SECTION, CLEAR_POSTS, CLEAR_POST, SEARCH_POSTS } from "./types";
 
 // Set loading state
 export const setPostLoading = () => ({
@@ -22,6 +22,10 @@ export const clearPost = () => ({
     type: CLEAR_POST,
 });
 
+export const setPostLoadingAction = () => (dispatch) => {
+    dispatch(setPostLoading());
+};
+
 // Add Post
 export const addPost = postData => (dispatch) => {
     dispatch(clearErrors());
@@ -35,23 +39,21 @@ export const addPost = postData => (dispatch) => {
 };
 
 // Get Posts
-export const getPosts = data => (dispatch) => {
-    axios
-        .post("/api/posts", data)
-        .then(res => dispatch({
-            type: GET_POSTS,
-            payload: res.data,
-        }))
-        .catch(err => dispatch({
-            type: GET_POSTS,
-            payload: {
-                error: err,
-            },
-        }));
-};
-export const setPostLoadingAction = () => (dispatch) => {
-    dispatch(setPostLoading());
-};
+// export const getPosts = data => (dispatch) => {
+//     axios
+//         .post("/api/posts", data)
+//         .then(res => dispatch({
+//             type: GET_POSTS,
+//             payload: res.data,
+//         }))
+//         .catch(err => dispatch({
+//             type: GET_POSTS,
+//             payload: {
+//                 error: err,
+//             },
+//         }));
+// };
+
 // Get Post by ID
 export const getPost = id => (dispatch) => {
     axios
@@ -69,46 +71,78 @@ export const getPost = id => (dispatch) => {
 };
 
 // Get Posts by Section
-export const getPostsBySection = (section, category) => (dispatch) => {
+export const getPostsBySectionAndCategory = (section, category, data) => (dispatch) => {
     axios
-        .get(`/api/posts/${section}/${category}`)
+        .post(`/api/posts/${section}/${category}`, data)
         .then(res => dispatch({
-            type: GET_POSTS_BY_SECTION,
+            type: GET_POSTS_BY_SECTION_AND_CATEGORY,
             payload: res.data,
         }))
         .catch(err => dispatch({
-            type: GET_POSTS_BY_SECTION,
+            type: GET_POSTS_BY_SECTION_AND_CATEGORY,
             payload: {
                 error: err,
             },
         }));
 };
-// Get Posts by Category
-export const getPostsByCategory = category => (dispatch) => {
+// // Get Posts by Category
+// export const getPostsByCategory = (category, data) => (dispatch) => {
+//     axios
+//         .post(`/api/posts/${category}`, data)
+//         .then(res => dispatch({
+//             type: GET_POSTS_BY_CATEGORY,
+//             payload: res.data,
+//         }))
+//         .catch(err => dispatch({
+//             type: GET_POSTS_BY_CATEGORY,
+//             payload: {
+//                 error: err,
+//             },
+//         }));
+// };
+
+// Get Newest Posts by Section
+export const getNewestPostsBySection = section => (dispatch) => {
     axios
-        .get(`/api/posts/${category}`)
+        .get(`/api/posts/newestPosts/${section}`)
         .then(res => dispatch({
-            type: GET_POSTS_BY_CATEGORY,
+            type: GET_NEWEST_POSTS_BY_SECTION,
             payload: res.data,
         }))
         .catch(err => dispatch({
-            type: GET_POSTS_BY_CATEGORY,
+            type: GET_NEWEST_POSTS_BY_SECTION,
             payload: {
                 error: err,
             },
         }));
 };
 
-// Get Posts by Category
-export const getNewestPostsBySection = section => (dispatch) => {
+// Get Newest Posts by Section
+export const getMorePostsByCategory = category => (dispatch) => {
     axios
-        .get(`/api/posts//newestPosts/${section}`)
+        .get(`/api/posts/morePosts/${category}`)
         .then(res => dispatch({
-            type: GET_NEWEST_POSTS_BY_SECTION,
+            type: GET_MORE_POSTS_BY_CATEGORY,
             payload: res.data,
         }))
         .catch(err => dispatch({
-            type: GET_NEWEST_POSTS_BY_SECTION,
+            type: GET_MORE_POSTS_BY_CATEGORY,
+            payload: {
+                error: err,
+            },
+        }));
+};
+
+// Search Posts
+export const searchPosts = (matchWord, data) => (dispatch) => {
+    axios
+        .post(`/api/posts/search`, matchWord, data)
+        .then(res => dispatch({
+            type: SEARCH_POSTS,
+            payload: res.data,
+        }))
+        .catch(err => dispatch({
+            type: SEARCH_POSTS,
             payload: {
                 error: err,
             },
