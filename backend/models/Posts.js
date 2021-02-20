@@ -2,24 +2,24 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PostsSchema = mongoose.Schema({
-user: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-    },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "users",
+  },
   title: {
     type: String,
     required: true,
   },
-  mainPhoto : [
+  mainPhoto: [
     {
       title: {
         type: String,
         required: true,
       },
-        id: {
-          type: String,
-        },
-    }
+      id: {
+        type: String,
+      },
+    },
   ],
   content: [
     {
@@ -27,27 +27,24 @@ user: {
         type: String,
         required: true,
       },
-        object: {
+      object: {
         type: Object,
-        },
-    }
+      },
+    },
   ],
   category: {
-      type: String,
-      required: true
+    type: String,
+    required: true,
   },
   section: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
-  comments: [
-    {type : Schema.Types.ObjectId, ref : 'comments'}
-  ],
+  comments: [{ type: Schema.Types.ObjectId, ref: "comments" }],
 });
-
 
 module.exports = mongoose.model("posts", PostsSchema, "posts");

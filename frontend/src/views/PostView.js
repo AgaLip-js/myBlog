@@ -63,7 +63,6 @@ const PostView = ({ match }) => {
     if (loadingImg || loadingPost || !post || !images) {
         return <Spinner />;
     }
-
     return (
         <StyledWrapper>
             <StyledHeader>{post.title}</StyledHeader>

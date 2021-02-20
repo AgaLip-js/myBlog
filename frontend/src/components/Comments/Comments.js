@@ -18,80 +18,6 @@ const StyledUserCommentsList = styled.div`
     row-gap: 15px;
 `;
 
-const commentsOb = [
-    {
-        id: 1,
-        userName: "Pan ktośiek",
-        commentText:
-            "The standard Lorem Ipsum passage, used since the 1500s &ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        updateDate: new Date(),
-        reactions: [
-            {
-                name: "Like",
-                count: 20,
-            },
-            {
-                name: "Laught",
-                count: 10,
-            },
-        ],
-        subComments: [
-            {
-                id: 2,
-                userName: "Pan Guninośiek",
-                commentText: "The standard Lorem Ipsum passage, used since the 1500s &ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod te.",
-                updateDate: new Date(),
-                reactions: [
-                    {
-                        name: "Like",
-                        count: 0,
-                    },
-                    {
-                        name: "Laught",
-                        count: 10,
-                    },
-                ],
-                subComments: [
-                    {
-                        id: 3,
-                        userName: "Pan Guninośiek",
-                        commentText: "The standard Lorem Ipsum passage, used since the 1500s &ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod te.",
-                        updateDate: new Date(-100),
-                        reactions: [
-                            {
-                                name: "Like",
-                                count: 20,
-                            },
-                            {
-                                name: "Laught",
-                                count: 10,
-                            },
-                        ],
-                        subComments: [],
-                    },
-                    {
-                        id: 4,
-                        userName: "Pan Guninośiek",
-                        commentText: "The standard Lorem Ipsum passage, used since the 1500s &ldquo;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod te.",
-                        updateDate: new Date(),
-                        reactions: [
-                            {
-                                name: "Like",
-                                count: 20,
-                            },
-                            {
-                                name: "Laught",
-                                count: 10,
-                            },
-                        ],
-                        subComments: [],
-                    },
-                ],
-            },
-        ],
-    },
-];
-
 const Comments = ({ postId }) => {
     const { comments } = useSelector(({ post }) => ({
         comments: post.comments,
@@ -100,7 +26,7 @@ const Comments = ({ postId }) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getComments(postId));
-    }, [dispatch]);
+    }, [dispatch, postId]);
 
     return (
         <StyledComentsWrapper>
