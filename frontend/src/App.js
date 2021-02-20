@@ -1,13 +1,12 @@
 import jwtDecode from "jwt-decode";
-import React, { useEffect, useState } from "react";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { Provider } from "react-redux";
 import { BrowserRouter, Redirect, Route, Router, Switch } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import Spinner from "./components/atoms/Spinner";
+import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
 import Rightbar from "./components/Rightbar/Rightbar";
 import { logoutUser, setCurrentUser } from "./redux/actions/authAction";
-import { getPosts, setPostLoadingAction } from "./redux/actions/postActions";
 import store from "./redux/store/store";
 import history from "./templates/history";
 import { PrivateRoute } from "./templates/PrivateRoute";
@@ -17,7 +16,7 @@ import setAuthToken from "./utils/setAuthToken";
 import AboutMe from "./views/AboutMe";
 import Articles from "./views/Articles";
 import DashboardCMS from "./views/DashboardCMS";
-import MainView from "./views/MainView";
+import News from "./views/News";
 import PostView from "./views/PostView";
 import PrivateLogin from "./views/PrivateLogin";
 import Science from "./views/Science";
@@ -41,14 +40,6 @@ function App() {
             window.location.href = "/";
         }
     }
-    // const [sectionView, setSectionView] = useState(history.location.pathname);
-    // const [categoryView, setCategoryView] = useState('all categories');
-    // useEffect(() => {
-    //     setSectionView(history.location.pathname);
-    //     console.log(history.location.pathname);
-    // }, [history]);
-
-    // const [searchField, setSearchField] = useState('');
 
     return (
         <>
@@ -59,7 +50,7 @@ function App() {
                         <Navbar />
                         <Rightbar />
                         <Switch>
-                            <Route exact path="/" component={() => <MainView />} />
+                            <Route exact path="/" component={() => <News />} />
                             <Route exact path="/nauka" component={() => <Science />} />
                             <Route exact path="/artykuly" component={() => <Articles />} />
                             <Route exact path="/o-mnie" component={AboutMe} />
@@ -68,6 +59,7 @@ function App() {
                             <PrivateRoute exact path="/admin-cms/dashboardCMS" component={DashboardCMS} />
                             <Redirect from="*" to="/" />
                         </Switch>
+                        <Footer />
                     </Router>
                 </BrowserRouter>
             </ThemeProvider>

@@ -15,26 +15,103 @@ const validatePostInput = require('../validation/post');
 // @access  Public
 router.get('/test', (req, res) => res.json({ msg: 'Posts Works' }));
 
+// @route   POST api/posts
+// @desc    Create post
+// @access  Private
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+
+    const newPost = new Post({
+    user: req.user.id,
+    title: req.body.title,
+    mainPhoto: req.body.mainPhoto,
+    content: req.body.content,
+    category: req.body.category,
+    section: req.body.section
+    });
+
+    newPost.save()
+    .then(post => {
+      res.json(post)})
+    .catch(err => res.status(404).json({message: 'Error! Could not add post'}));
+  }
+);
+
 // @route   GET api/posts
 // @desc    Get posts
 // @access  Public
 router.post('/', (req, res) => {
-  console.log(req.body)
   const start = req.body.start;
-  console.log(start)
   const count = req.body.count
-  console.log(count)
   Post.find()
     .sort({ date: -1 })
     .skip(start - 1)
     .limit(count)
     .then(posts => {
-      console.log(posts);
       res.json(posts)
     })
     .catch(err => res.status(404).json({ nopostsfound: 'No posts found' }));
 });
 
+
+
+  //@route   GET api/posts/:category
+ //@desc    Get posts
+ //@access  Public
+
+
+ router.post('/:section/:category', (req, res) => {
+  const section = req.params.section;
+  const category = req.params.category;
+  const start = req.body.start;
+  const count = req.body.count
+  if(category === "all categories" && section==='mainView') {
+    Post.find()
+    .sort({ date: -1 })
+    .skip(start - 1)
+    .limit(count)
+    .then(post => {
+      res.json(post)
+    })
+    .catch(err => res.status(404).json({ nopostsfound: 'No post found for that section' }));
+  } else if(category === 'all categories' && section !=='mainView') {
+    Post.find({ section: section})
+    .sort({ date: -1 })
+    .skip(start - 1)
+    .limit(count)
+    .then(post => {
+      res.json(post)
+    })
+    .catch(err => res.status(404).json({ nopostsfound: 'No post found for that category' }));
+  } else {
+    Post.find({category: category})
+    .sort({ date: -1 })
+    .skip(start - 1)
+    .limit(count)
+    .then(post => {
+      res.json(post)
+    })
+    .catch(err => res.status(404).json({ nopostsfound: 'No post found for that category' }));
+  }
+});
+  //@route   GET api/posts/newestPosts/:section
+ //@desc    Get posts
+ //@access  Public
+
+ router.get('/morePosts/:category', (req, res) => {
+  const category = req.params.category;
+
+   Post.find({category: category}, {title: 1, mainPhoto: 1})
+      .sort({ date: -1 })
+      .limit(3)
+     .then(post => {
+      res.json(post);
+     })
+     .catch(err => res.status(404).json({ nopostsfound: 'No post found ' }));
+
+ });
 
  //@route   GET api/posts/newestPosts/:section
  //@desc    Get posts
@@ -42,63 +119,48 @@ router.post('/', (req, res) => {
 
  router.get('/newestPosts/:section', (req, res) => {
   const section = req.params.section;
+
   if (section === 'mainView') {
-    Post.find({ }, {title:1})
+    Post.find({ }, {title:1, mainPhoto: 1})
     .sort({ date: -1 })
     .limit(5)
    .then(post => {
-     console.log(post)
      res.json(post)
    })
    .catch(err => res.status(404).json({ nopostsfound: 'No post found ' }));
   }
   else {
-   Post.find({section: section}, {title: 1})
+   Post.find({section: section}, {title: 1, mainPhoto: 1})
       .sort({ date: -1 })
       .limit(5)
      .then(post => {
-       console.log(post)
-       res.json(post)
+         res.json(post)
      })
      .catch(err => res.status(404).json({ nopostsfound: 'No post found ' }));
     }
  });
 
-// @route   GET api/posts/:section
-// @desc    Get posts
+
+// @route   GET api/posts/search
+// @desc    Get post by id
 // @access  Public
-router.get('/:section/:category', (req, res) => {
-  const section = req.params.section;
-  const category = req.params.category;
-  console.log("section: ");
-  console.log(section);
+router.post('/search', (req, res) => {
+  const start = req.body.start;
+  const count = req.body.count
+  const matchWord = req.body.searchText;
+  const regex = new RegExp(matchWord, 'i')
 
-  console.log("category: ");
-  console.log(category);
-
-  if(category === "all categories"){
-    Post.find({section: section})
-    .sort({ date: -1 })
+  Post.find({title: {$regex: regex}})
+  .sort({ date: -1 })
+  .skip(start - 1)
+  .limit(count)
     .then(post => {
-      console.log(post)
       res.json(post)
     })
-    .catch(err => res.status(404).json({ nopostsfound: 'No post found for that section' }));
-  }
-  else {
-    Post.find({ section, category})
-    .sort({ date: -1 })
-    .then(post => {
-      console.log(post)
-      res.json(post)
-    })
-    .catch(err => res.status(404).json({ nopostsfound: 'No post found for that section' }));
-  }
-
-});
-
-
-
+    .catch(err => {
+      res.status(404).json({ nopostfound: 'No post found with that ID' })
+    });
+  });
 
 // @route   GET api/posts/:id
 // @desc    Get post by id
@@ -111,34 +173,6 @@ router.get('/:id', (req, res) => {
     );
 });
 
-// @route   POST api/posts
-// @desc    Create post
-// @access  Private
-router.post(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    //  const { errors, isValid } = validatePostInput(req.body);
-
-    //  // Check Validation
-    //  if (!isValid) {
-    //    // If any errors, send 400 with errors object
-    //    return res.status(400).json({msg: 'Invalid post!'});
-    //  }
-
-    const newPost = new Post({
-    user: req.user.id,
-    title: req.body.title,
-    content: req.body.content,
-    category: req.body.category,
-    section: req.body.section
-    });
-
-    newPost.save()
-    .then(post => res.json(post))
-    .catch(err => res.status(404).json({message: 'Error! Could not add post'}));
-  }
-);
 
 // @route   DELETE api/posts/:id
 // @desc    Delete post

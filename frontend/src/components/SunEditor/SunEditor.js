@@ -4,20 +4,15 @@ import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import './SunEditor.css';
 
-const SunEditorComponent = ({ initialContent, title, onSubmit, editorChange, id, hide, disable, showController, showToolbar }) => {
+const SunEditorComponent = ({ initialContent, editorChange, id, hide, disable, showController, showToolbar }) => {
     const editorRef = useRef();
     const [content, setContent] = useState(initialContent);
 
     useEffect(() => {
         if (editorChange) {
             editorChange(content, id);
-            console.log(content);
         }
     }, [content]);
-
-    useEffect(() => {
-
-    }, []);
 
     return (
         <div>

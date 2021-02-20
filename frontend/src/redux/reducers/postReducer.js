@@ -1,11 +1,17 @@
-import { ADD_POST, GET_POSTS, GET_POST, DELETE_POST, POST_LOADING, GET_POSTS_BY_SECTION, GET_POSTS_BY_CATEGORY, GET_NEWEST_POSTS_BY_SECTION, CLEAR_POSTS, CLEAR_POST } from "../actions/types";
+import { ADD_POST, GET_POST, DELETE_POST, POST_LOADING, GET_NEWEST_POSTS_BY_SECTION, CLEAR_POSTS, CLEAR_POST,
+    GET_POSTS_BY_SECTION_AND_CATEGORY,
+    SEARCH_POSTS,
+    GET_MORE_POSTS_BY_CATEGORY } from "../actions/types";
 
 const initialState = {
     posts: [],
     post: {
     },
     newestPosts: [],
-    loading: false,
+    loading: true,
+    start: 1,
+    count: 5,
+    morePosts: [],
 };
 const postReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -18,6 +24,8 @@ const postReducer = (state = initialState, action) => {
             return {
                 ...state,
                 posts: [],
+                start: 1,
+                count: 5,
             };
         case CLEAR_POST:
             return {
@@ -25,10 +33,11 @@ const postReducer = (state = initialState, action) => {
                 post: {
                 },
             };
-        case GET_POSTS:
+        case SEARCH_POSTS:
             return {
                 ...state,
-                posts: action.payload,
+                posts: [...state.posts, ...action.payload],
+                start: state.start + state.count,
                 loading: false,
             };
         case GET_POST:
@@ -37,28 +46,30 @@ const postReducer = (state = initialState, action) => {
                 post: action.payload,
                 loading: false,
             };
-        case GET_POSTS_BY_SECTION:
+        case GET_POSTS_BY_SECTION_AND_CATEGORY:
             return {
                 ...state,
-                posts: action.payload,
-                loading: false,
-            };
-        case GET_POSTS_BY_CATEGORY:
-            return {
-                ...state,
-                posts: action.payload,
+                posts: [...state.posts, ...action.payload],
+                start: state.start + state.count,
                 loading: false,
             };
         case GET_NEWEST_POSTS_BY_SECTION:
             return {
                 ...state,
                 newestPosts: action.payload,
-                loading: false,
             };
+        case GET_MORE_POSTS_BY_CATEGORY:
+            return {
+                ...state,
+                morePosts: action.payload,
+            };
+
         case ADD_POST:
             return {
                 ...state,
-                posts: [action.payload, ...state.posts],
+                posts: [...state.posts, action.payload],
+                start: state.start + state.count,
+                loading: false,
             };
         case DELETE_POST:
             return {

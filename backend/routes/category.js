@@ -32,7 +32,7 @@ router.get('/categories', (req, res) => {
 
   router.get('/:section', (req, res) => {
     const selectSection = req.params.section
-    console.log(selectSection);
+
     Post.find()
       .sort({ date: -1 })
       .then(posts => {

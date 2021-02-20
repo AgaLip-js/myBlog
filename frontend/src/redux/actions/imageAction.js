@@ -1,6 +1,6 @@
 import axios from "axios";
 import { returnErrors } from "./errorAction";
-import { ADD_IMAGE, GET_ERRORS, GET_IMAGE, GET_IMAGES, IMAGE_LOADING } from "./types";
+import { ADD_IMAGE, GET_IMAGE, GET_IMAGES, IMAGE_LOADING } from "./types";
 
 // Set loading state
 export const setImageLoading = () => ({

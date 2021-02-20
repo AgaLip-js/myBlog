@@ -10,6 +10,17 @@ user: {
     type: String,
     required: true,
   },
+  mainPhoto : [
+    {
+      title: {
+        type: String,
+        required: true,
+      },
+        id: {
+          type: String,
+        },
+    }
+  ],
   content: [
     {
       type: {

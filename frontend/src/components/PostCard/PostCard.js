@@ -15,8 +15,6 @@ const StyledWrapper = styled.div`
         display: flex;
         flex-direction: column;
     }
-
-
 `;
 const StyledTitle = styled.p`
     font-size: ${({ theme }) => theme.fontSize.l};
@@ -63,13 +61,18 @@ const StyledText = styled.div`
     }
 `;
 
-const PostCard = ({ date, category, id, title, content }) => {
+const PostCard = ({ date, category, id, title, content, mainPhoto }) => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     useEffect(() => {
         window.addEventListener("resize", () => {
             setWindowWidth(window.innerWidth);
         });
+        return () => {
+            window.removeEventListener("resize", () => {
+                setWindowWidth(window.innerWidth);
+            });
+        };
     }, [window.innerWidth]);
 
     const truncateTitle = () => {
@@ -89,35 +92,44 @@ const PostCard = ({ date, category, id, title, content }) => {
 
     const newDate = moment(date).format("DD/MM/YYYY");
 
+    // hightlight mainContent in the card description
     const mainContent = content.find(ct => ct.type === "text").object;
 
     return (
-        <StyledWrapper>
-            <StyledImage icon={background} />
-            <StyledContent>
-                <StyledDateCategory>
-                    {newDate}
-                    {' '}
-                    -
-                    {category}
-                </StyledDateCategory>
-                <StyledTitle>{title}</StyledTitle>
-                {/* eslint-disable-next-line react/no-danger */}
-                <StyledText
-                    dangerouslySetInnerHTML={{
-                        __html: truncate(mainContent),
-                    }}
-                />
-                <Link
-                    to={`/post/${id}`}
-                    style={{
-                        width: "fit-content",
-                    }}
-                >
-                    <Button>Czytaj więcej</Button>
-                </Link>
-            </StyledContent>
-        </StyledWrapper>
+        content && title ? (
+            <StyledWrapper>
+                {mainPhoto.length ? (
+                    <StyledImage icon={`http://localhost:5000/files/${mainPhoto[0].title}`} />
+                ) : (
+                    <StyledImage icon={background} />
+                )}
+                <StyledContent>
+                    <StyledDateCategory>
+                        {newDate}
+                        {' '}
+                        -
+                        {category}
+                    </StyledDateCategory>
+                    <StyledTitle>{title}</StyledTitle>
+                    {/* eslint-disable-next-line react/no-danger */}
+                    <StyledText
+                        dangerouslySetInnerHTML={{
+                            __html: truncate(mainContent),
+                        }}
+                    />
+                    <Link
+                        to={`/post/${id}`}
+                        style={{
+                            width: "fit-content",
+                        }}
+                    >
+                        <Button>Czytaj więcej</Button>
+                    </Link>
+                </StyledContent>
+            </StyledWrapper>
+        ) : (
+            <p />
+        )
     );
 };
 export default PostCard;

@@ -95,13 +95,12 @@ const StyledLabel = styled.label`
 `;
 
 const AddPostForm = () => {
-    const [fileName, setFileName] = useState([]);
-    const { content, post, error } = useSelector(store => ({
+    const { content } = useSelector(store => ({
         content: store.content.content,
-        post: store.post.post,
-        error: store.errors.error,
     }));
 
+    const [fileName, setFileName] = useState([]);
+    const [mainPhoto, setMainPhoto] = useState([]);
     const contentArray = [];
     const [newContent, setNewContent] = useState(contentArray);
     const dispatch = useDispatch();
@@ -134,6 +133,7 @@ const AddPostForm = () => {
     };
     const postArray = {
         title: "",
+        mainPhoto: '',
         content,
         category: "",
         id: uuidv4(),
@@ -192,11 +192,14 @@ const AddPostForm = () => {
             setErrorMsg('Content is empty !');
         } else if (isEmpty(newPost.section)) {
             setErrorMsg('Section is empty !');
+        } else if (!mainPhoto.length) {
+            setErrorMsg('Choose main photo !');
         } else {
             uploadPhotos();
 
             dispatch(addPost({
                 ...newPost,
+                mainPhoto,
                 content: newContent,
             }));
             setErrorMsg('');
@@ -227,6 +230,16 @@ const AddPostForm = () => {
             <StyledTitle> Dodaj Post </StyledTitle>
             <StyledAddForm>
                 <Input secondary className="required" type="text" required="required" title="Tytuł postu" name="title" value={newPost.title} onChange={handleInputChange} />
+
+                <InputImg
+                    name='Main Photo'
+                    fileName={mainPhoto}
+                    setFileName={setMainPhoto}
+                    setSelectedFile={setSelectedFile}
+                    selectedFile={selectedFile}
+                    setErrorMsg={setErrorMsg}
+                />
+                <StyledLabel htmlFor='Main Photo'>Zdjęcie główne</StyledLabel>
                 <StyledContainerForContent>
                     {content
                         && content.map((c, i) => c.type === "text" ? (
