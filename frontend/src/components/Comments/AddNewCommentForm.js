@@ -1,5 +1,5 @@
-import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
@@ -12,6 +12,7 @@ const StyledAddNewCommentForm = styled.div`
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+    margin-top: 10px;
 `;
 
 const StyledUserInfo = styled.div`
@@ -70,7 +71,7 @@ const AddNewCommentForm = ({ postId, commentId, setToogleReplyVisible }) => {
             </span>
             <StyledUserInfo>
                 <SignInBySocialNetworkWrapper>
-                    <span>Zaloguj się za pomocą:</span>
+                    {/* <span>Zaloguj się za pomocą:</span> */}
                     <div
                         style={{
                             padding: "10px",
@@ -79,8 +80,8 @@ const AddNewCommentForm = ({ postId, commentId, setToogleReplyVisible }) => {
                             justifyContent: "center",
                         }}
                     >
-                        <FontAwesomeIcon icon={faGoogle} size="3x" color="#DB4437" />
-                        <FontAwesomeIcon icon={faFacebook} size="3x" color="#4267B2" />
+                        {/* <FontAwesomeIcon icon={faGoogle} size="3x" color="#DB4437" />
+                        <FontAwesomeIcon icon={faFacebook} size="3x" color="#4267B2" /> */}
                     </div>
                 </SignInBySocialNetworkWrapper>
                 <ContinueAsGuest>

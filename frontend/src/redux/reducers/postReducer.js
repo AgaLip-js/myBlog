@@ -49,7 +49,7 @@ const findAndAddObject = (comments, commentId, objectToAdd) => {
                 ...acc,
                 {
                     ...currComment,
-                    comments: [...currComment.comments, objectToAdd],
+                    comments: [objectToAdd, ...currComment.comments],
                 },
             ];
         }
@@ -134,7 +134,7 @@ const postReducer = (state = initialState, action) => {
         case ADD_NEW_COMMENT:
             return {
                 ...state,
-                comments: [...state.comments, action.payload.comment],
+                comments: [action.payload.comment, ...state.comments],
             };
         case ADD_REACTION: {
             return {

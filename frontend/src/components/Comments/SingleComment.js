@@ -29,7 +29,7 @@ const StyledTitleWrapper = styled.span``;
 
 const StyledCommentText = styled.p`
     margin: 0;
-    font-size: 16px;
+    font-size: ${({ isThread }) => (isThread ? "14px" : "16px")};
 `;
 
 const StyledCommentFooter = styled.span`
@@ -43,6 +43,7 @@ const StyledCommentFooter = styled.span`
 const StyledSpan = styled.span`
     cursor: ${({ clickable }) => (clickable ? "pointer" : "default")};
     color: ${({ isActive }) => (isActive ? "#0076f1" : "#bdbcbc")};
+    font-size: ${({ isThread }) => (isThread ? "12px" : "14px")};
 `;
 
 const StyledReactionsMenu = styled.div`
@@ -62,8 +63,9 @@ const formatDate = (date) => {
         year: "numeric",
         month: "short",
         day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
     };
-
     if (date.getFullYear() !== new Date().getFullYear()) {
         return date.toLocaleDateString("pl", options);
     }
@@ -157,7 +159,7 @@ CommentReactions.propTypes = {
         }),
     ),
 };
-const SingleComment = ({ postId, level, name, updateDate, commentText, reactions, _id, comments }) => {
+const SingleComment = ({ postId, level, name, updateDate, commentText, reactions, _id, comments, isThread }) => {
     const [isPopoverVisible, openPopover] = useState(false);
     const recommendRef = useRef(null);
     const [toggleReplyVisible, setToogleReplyVisible] = useState(false);
@@ -179,9 +181,9 @@ const SingleComment = ({ postId, level, name, updateDate, commentText, reactions
                 <StyledTitleWrapper>
                     <StyledCommentTitle>{name}</StyledCommentTitle>
                     <StyledDotSeparator />
-                    <StyledSpan>{formatDate(new Date(updateDate))}</StyledSpan>
+                    <StyledSpan isThread={isThread}>{formatDate(new Date(updateDate))}</StyledSpan>
                 </StyledTitleWrapper>
-                <StyledCommentText>{commentText}</StyledCommentText>
+                <StyledCommentText isThread={isThread}>{commentText}</StyledCommentText>
                 <StyledCommentFooter>
                     {reactions && reactions.length > 0 && (
                         <>
