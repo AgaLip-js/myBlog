@@ -8,7 +8,7 @@ import { ADD_POST,
     CLEAR_POST,
     GET_POSTS_BY_SECTION_AND_CATEGORY,
     SEARCH_POSTS,
-    GET_MORE_POSTS_BY_CATEGORY, EDIT_POST, GET_POSTS } from "../actions/types";
+    GET_MORE_POSTS_BY_CATEGORY, EDIT_POST, GET_POSTS, POST_LOADING_MORE } from "../actions/types";
 
 const initialState = {
     posts: [],
@@ -19,8 +19,9 @@ const initialState = {
     loadingComments: false,
     comments: [],
     start: 1,
-    count: 5,
+    count: 8,
     morePosts: [],
+    loadingMore: false,
 };
 
 const findAndReplaceObject = (comments, objectToReplace) => {
@@ -75,12 +76,17 @@ const postReducer = (state = initialState, action) => {
                 ...state,
                 loading: true,
             };
+        case POST_LOADING_MORE:
+            return {
+                ...state,
+                loadingPosts: true,
+            };
         case CLEAR_POSTS:
             return {
                 ...state,
                 posts: [],
                 start: 1,
-                count: 5,
+                count: 8,
             };
         case CLEAR_POST:
             return {
@@ -113,6 +119,7 @@ const postReducer = (state = initialState, action) => {
                 posts: [...state.posts, ...action.payload],
                 start: state.start + state.count,
                 loading: false,
+                loadingMore: false,
             };
         case GET_NEWEST_POSTS_BY_SECTION:
             return {

@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 import AddPostForm from "../components/AddPostForm/AddPostForm";
 import { logoutUser } from "../redux/actions/authAction";
 import store from "../redux/store/store";
 import Button from '../components/atoms/Button';
+import { clearPost } from "../redux/actions/postActions";
 
 const StyledWrapper = styled.div`
     position: relative;
@@ -44,7 +46,7 @@ const DashboardCMS = () => {
     const logoutFn = () => {
         store.dispatch(logoutUser());
     };
-
+    const dispatch = useDispatch();
     const [option, setOption] = useState('add');
 
     return (
@@ -64,7 +66,13 @@ const DashboardCMS = () => {
             </StyledTopContent>
             <StyledContentWrapper>
                 <StyledButtonWrapper>
-                    <Button onClick={() => setOption('add')}>Dodaj Post</Button>
+                    <Button onClick={() => {
+                        setOption('add');
+                        dispatch(clearPost());
+                    }}
+                    >
+                        Dodaj Post
+                    </Button>
                     <Button onClick={() => setOption('edit')}>Edytuj Post</Button>
                 </StyledButtonWrapper>
                 <AddPostForm option={option} />

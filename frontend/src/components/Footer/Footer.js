@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopyright } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { shallowEqual, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 const StyledFooterContainer = styled.footer`
     position: relative;
@@ -26,9 +27,20 @@ const StyledFooterList = styled.div`
 `;
 
 const StyledTitle = styled.p`
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-size: 16px;
-    margin: 15px;
+    margin: 15px 10px;
+
+`;
+
+const StyledLink = styled(NavLink)`
+    text-decoration: none;
+    color: white;
+
+    &:hover {
+        color:#cadcec;
+    }
+
 `;
 const StyledCopywrightIcon = styled.span``;
 
@@ -42,17 +54,24 @@ const Footer = () => {
     );
 
     return (
-        !loading
-        && posts.length > 0 && (
-            <StyledFooterContainer>
-                <StyledFooterList>
-                    <StyledCopywrightIcon>
-                        <FontAwesomeIcon icon={faCopyright} size="2x" />
-                    </StyledCopywrightIcon>
-                    <StyledTitle>Copyright 2020, Agata Lipiak</StyledTitle>
-                </StyledFooterList>
-            </StyledFooterContainer>
-        )
+        <StyledFooterContainer>
+            <StyledFooterList>
+                <StyledCopywrightIcon>
+                    <FontAwesomeIcon icon={faCopyright} size="2x" />
+                </StyledCopywrightIcon>
+                <StyledTitle style={{
+                    marginRight: '50px',
+                }}
+                >
+                    Copyright 2020, Agata Lipiak - Zakoduj to
+                </StyledTitle>
+                <StyledTitle>
+                    <StyledLink to='/regulamin'>Regulamin Serwisu</StyledLink>
+                </StyledTitle>
+                <StyledTitle><StyledLink to='/polityka-prywatnosci'>Polityka Prywatności</StyledLink></StyledTitle>
+                <StyledTitle><StyledLink to='/rodo'>Rodo</StyledLink></StyledTitle>
+            </StyledFooterList>
+        </StyledFooterContainer>
     );
 };
 

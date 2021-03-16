@@ -1,11 +1,16 @@
 import axios from "axios";
 import { returnErrors } from "./errorAction";
 import { ADD_POST, CLEAR_ERRORS, DELETE_POST, GET_ERRORS, GET_POST, POST_LOADING,
-    GET_POSTS_BY_SECTION_AND_CATEGORY, GET_MORE_POSTS_BY_CATEGORY, GET_NEWEST_POSTS_BY_SECTION, CLEAR_POSTS, CLEAR_POST, SEARCH_POSTS, EDIT_POST, GET_POSTS } from "./types";
+    GET_POSTS_BY_SECTION_AND_CATEGORY, GET_MORE_POSTS_BY_CATEGORY, GET_NEWEST_POSTS_BY_SECTION, CLEAR_POSTS, CLEAR_POST, SEARCH_POSTS, EDIT_POST, GET_POSTS, POST_LOADING_MORE } from "./types";
 
 // Set loading state
 export const setPostLoading = () => ({
     type: POST_LOADING,
+});
+
+// Set loading state for load more
+export const setLoadingMore = () => ({
+    type: POST_LOADING_MORE,
 });
 
 // Clear errors
@@ -24,6 +29,10 @@ export const clearPost = () => ({
 
 export const setPostLoadingAction = () => (dispatch) => {
     dispatch(setPostLoading());
+};
+
+export const setPostLoadingMore = () => (dispatch) => {
+    dispatch(setLoadingMore());
 };
 
 // Add Post

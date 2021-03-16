@@ -1,6 +1,6 @@
 // import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { addComment, addReply } from "../../redux/actions/commentActions";
@@ -27,7 +27,7 @@ const StyledButtonContainer = styled.div`
 `;
 
 const SignInBySocialNetworkWrapper = styled.div`
-    display: flex;
+    display: none;
     flex-direction: column;
     width: max-content;
 `;
@@ -46,29 +46,31 @@ const AddNewCommentForm = ({ postId, commentId, setToogleReplyVisible }) => {
 
     const isKnownUser = false;
 
+    const clearState = () => {
+        setCommentText('');
+        setName('');
+        setEmailAddress('');
+    };
+
     const handleButtonClick = () => {
         const commentData = {
             name,
             commentText,
             user: "GUEST",
         };
+
         if (commentId) {
             dispatch(addReply(postId, commentId, commentData));
             setToogleReplyVisible(false);
+            clearState();
         } else {
             dispatch(addComment(postId, commentData));
+            clearState();
         }
-    };
-
-    const handleNameAndCheckIfAlreadyExists = (v) => {
-        setName(v);
     };
 
     return (
         <StyledAddNewCommentForm>
-            <span>
-                <CommentInput type="text" name="commentText" textArea value={commentText} handleChange={v => setCommentText(v)} title="" placeholder="Dodaj nowy komentarz..." />
-            </span>
             <StyledUserInfo>
                 <SignInBySocialNetworkWrapper>
                     {/* <span>Zaloguj się za pomocą:</span> */}
@@ -85,11 +87,14 @@ const AddNewCommentForm = ({ postId, commentId, setToogleReplyVisible }) => {
                     </div>
                 </SignInBySocialNetworkWrapper>
                 <ContinueAsGuest>
-                    <span>Kontynuuj jako gość</span>
-                    <CommentInput type="text" name="name" value={name} handleChange={v => handleNameAndCheckIfAlreadyExists(v)} title="" placeholder="Wpisz swoje imię..." />
-                    <CommentInput type="text" name="emailAddress" value={emailAddress} handleChange={v => setEmailAddress(v)} title="" placeholder="Wpisz swój email (opcjonalnie)..." />
+                    <span />
+                    <CommentInput type="text" name="name" value={name} handleChange={e => setName(e.target.value)} title="" placeholder="Wpisz swoje imię..." />
+                    <CommentInput type="text" name="emailAddress" value={emailAddress} handleChange={e => setEmailAddress(e.target.value)} title="" placeholder="Wpisz swój email (opcjonalnie)..." />
                 </ContinueAsGuest>
             </StyledUserInfo>
+            <span>
+                <CommentInput type="text" name="commentText" textArea value={commentText} handleChange={e => setCommentText(e.target.value)} title="" placeholder="Dodaj nowy komentarz..." />
+            </span>
             <StyledButtonContainer>
                 <Button
                     style={{

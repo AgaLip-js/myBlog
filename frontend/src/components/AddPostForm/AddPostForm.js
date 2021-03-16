@@ -1,4 +1,4 @@
-import { faCamera, faFont } from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faCode, faFont } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import isEmpty from "../../validation/is-empty";
 import { addContent, editContent, removeContent } from "../../redux/actions/contentAction";
 import { addImage } from "../../redux/actions/imageAction";
-import { addPost, getPost } from "../../redux/actions/postActions";
+import { addPost, clearPost, getPost } from "../../redux/actions/postActions";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 import InputImg from "../atoms/InputImg";
@@ -94,6 +94,9 @@ const StyledLabel = styled.label`
   text-transform: uppercase;
   letter-spacing: 0.2em;
 `;
+const StyledSectionTitle = styled.h4`
+
+`;
 
 const AddPostForm = ({ option }) => {
     const { content, post } = useSelector(store => ({
@@ -104,24 +107,58 @@ const AddPostForm = ({ option }) => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [fileName, setFileName] = useState([]);
     const [mainPhoto, setMainPhoto] = useState([]);
-    const contentArray = [];
+    const contentArray = post.content ? post.content : [];
     const [newContent, setNewContent] = useState(contentArray);
     const dispatch = useDispatch();
     const [selectedFile, setSelectedFile] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
     const [succesMsg, setSuccesMsg] = useState('');
 
+    const postArray = {
+        title: post.title ? post.title : "",
+        mainPhoto: post.mainPhoto ? post.mainPhoto : '',
+        content: post.content ? post.content : content,
+        category: post.category ? post.category : "",
+        id: uuidv4(),
+        section: post.section ? post.section : '',
+    };
+    const [newPost, setNewPost] = useState(postArray);
+
+    useEffect(() => {
+        setNewPost(postArray);
+        setNewContent(contentArray);
+    }, [post]);
+
     // const [editorText, setEditorText] = useState(null);
 
     const handleAddNewContent = (type) => {
-        const primaryContent = {
-            type,
-            object: "",
-            id: uuidv4(),
-        };
-        setNewContent([...newContent, primaryContent]);
-        dispatch(addContent(primaryContent));
+        let primaryContent;
+        let secondaryContent;
+
+        if (type === 'challenge') {
+            primaryContent = {
+                type,
+                object: "",
+                id: uuidv4(),
+            };
+            secondaryContent = {
+                type,
+                object: "",
+                id: uuidv4(),
+            };
+            setNewContent([...newContent, primaryContent, secondaryContent]);
+            dispatch(addContent(primaryContent));
+        } else {
+            primaryContent = {
+                type,
+                object: "",
+                id: uuidv4(),
+            };
+            setNewContent([...newContent, primaryContent]);
+            dispatch(addContent(primaryContent));
+        }
     };
+
     const handleRemoveContent = (id) => {
         dispatch(removeContent(id));
         setNewContent(
@@ -134,16 +171,6 @@ const AddPostForm = ({ option }) => {
         );
         setFileName(fileName.filter(fn => fn.id !== id));
     };
-    const postArray = {
-        title: "",
-        mainPhoto: '',
-        content,
-        category: "",
-        id: uuidv4(),
-        section: '',
-    };
-
-    const [newPost, setNewPost] = useState(postArray);
 
     const handleInputChange = (e) => {
         setNewPost({
@@ -256,16 +283,25 @@ const AddPostForm = ({ option }) => {
                 <StyledLabel htmlFor='Main Photo'>Zdjęcie główne</StyledLabel>
                 <StyledContainerForContent>
                     {content
+                        // eslint-disable-next-line no-nested-ternary
                         && content.map((c, i) => c.type === "text" ? (
                             <StyledContainerText key={c.id}>
+                                <StyledSectionTitle>Pole Tekstowe</StyledSectionTitle>
                                 <SunEditorComponent editorChange={editorChange} id={c.id} initialContent="" />
                                 <Button onClick={() => handleRemoveContent(c.id)}>Usuń pole</Button>
                             </StyledContainerText>
-                        ) : (
+                        ) : c.type === "img" ? (
                             <StyledContainerPhoto key={c.id}>
+                                <StyledSectionTitle>Zdjęcie/ Obrazek</StyledSectionTitle>
                                 <InputImg name={c.id} fileName={fileName} setFileName={setFileName} setSelectedFile={setSelectedFile} selectedFile={selectedFile} i={i} setErrorMsg={setErrorMsg} />
                                 <Button onClick={() => handleRemoveContent(c.id)}>Usuń zdjęcie</Button>
                             </StyledContainerPhoto>
+                        ) : (
+                            <StyledContainerText key={c.id}>
+                                <StyledSectionTitle>Wyzwanie</StyledSectionTitle>
+                                <SunEditorComponent editorChange={editorChange} id={c.id} initialContent="" />
+                                <Button onClick={() => handleRemoveContent(c.id)}>Usuń wyzwanie</Button>
+                            </StyledContainerText>
                         ))}
                 </StyledContainerForContent>
 
@@ -288,9 +324,18 @@ const AddPostForm = ({ option }) => {
                             }}
                         />
                     </Button>
+                    <Button onClick={() => handleAddNewContent("challenge", "")}>
+                        Dodaj wyzwanie
+                        <FontAwesomeIcon
+                            icon={faCode}
+                            style={{
+                                marginLeft: "20px",
+                            }}
+                        />
+                    </Button>
                 </StyledButtonWrapper>
                 <Input secondary className="required" type="text" required="required" title="Kategoria postu" name="category" value={newPost.category} onChange={handleInputChange} />
-                <StyledSelect onChange={handleInputChange} name="section">
+                <StyledSelect onChange={handleInputChange} name="section" value={newPost.section}>
                     <StyledOption hidden selected>Select section...</StyledOption>
                     <StyledOption value='artykuly'>
                         Artykuły

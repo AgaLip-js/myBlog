@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../assets/developer.png";
-import mainLogo from "../../assets/logo.jpg";
+import mainLogo from "../../assets/logo2.jpg";
 import { clearCategory, handleSearchValue } from "../../redux/actions/globalActions";
 import history from "../../templates/history";
 import { useOnClickOutside } from "../../utils/hooks";

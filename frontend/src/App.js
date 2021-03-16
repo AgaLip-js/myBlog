@@ -18,8 +18,11 @@ import Articles from "./views/Articles";
 import DashboardCMS from "./views/DashboardCMS";
 import News from "./views/News";
 import PostView from "./views/PostView";
+import PrivacyPolicy from "./views/PrivacyPolicy";
 import PrivateLogin from "./views/PrivateLogin";
+import RODO from "./views/RODO";
 import Science from "./views/Science";
+import TermsOfService from "./views/TermsOfService";
 
 function App() {
     // Check for token
@@ -56,6 +59,9 @@ function App() {
                             <Route exact path="/o-mnie" component={AboutMe} />
                             <Route exact path="/admin-cms/login" component={PrivateLogin} />
                             <Route exact path="/post/:id" component={PostView} />
+                            <Route exact path="/regulamin" component={TermsOfService} />
+                            <Route exact path="/polityka-prywatnosci" component={PrivacyPolicy} />
+                            <Route exact path="/rodo" component={RODO} />
                             <PrivateRoute exact path="/admin-cms/dashboardCMS" component={DashboardCMS} />
                             <Redirect from="*" to="/" />
                         </Switch>

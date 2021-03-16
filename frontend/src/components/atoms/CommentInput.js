@@ -10,6 +10,7 @@ const StyledCommentInputComponent = styled.input`
     border-radius: 5px 5px 5px 5px;
     box-sizing: border-box;
     padding: 12px 20px;
+    font-family: 'Cabin';
 `;
 const StyledCommentInputTextAreaComponent = styled.textarea`
     max-width: 100%;
@@ -20,35 +21,33 @@ const StyledCommentInputTextAreaComponent = styled.textarea`
     border-radius: 5px 5px 5px 5px;
     box-sizing: border-box;
     padding: 12px 20px;
+    font-family: 'Cabin';
+    height: 150px;
+    resize: none;
 `;
 
 const CommentInput = ({ textArea, handleChange, value, name, ...props }) => {
-    const timeout = 400;
-    const isFirstRun = useRef(true);
-    const [text, setText] = useState("");
+    // const timeout = 400;
+    // const isFirstRun = useRef(true);
 
-    const handleSearch = (event) => {
-        setText(event.target.value);
-    };
+    // useEffect(() => {
+    //     const delayDebounceFn = setTimeout(() => {
+    //         if (!isFirstRun.current) {
+    //             handleChange(value, name);
+    //         }
+    //         if (isFirstRun.current) {
+    //             isFirstRun.current = false;
+    //         }
+    //     }, timeout);
 
-    useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            if (!isFirstRun.current) {
-                handleChange(text, name);
-            }
-            if (isFirstRun.current) {
-                isFirstRun.current = false;
-            }
-        }, timeout);
-
-        return () => clearTimeout(delayDebounceFn);
-    }, [text]);
+    //     return () => clearTimeout(delayDebounceFn);
+    // }, [value]);
 
     if (textArea) {
-        return <StyledCommentInputTextAreaComponent onChange={handleSearch} value={text} name={name} {...props} />;
+        return <StyledCommentInputTextAreaComponent onChange={handleChange} value={value} name={name} {...props} />;
     }
 
-    return <StyledCommentInputComponent onChange={handleSearch} value={text} name={name} {...props} />;
+    return <StyledCommentInputComponent onChange={handleChange} value={value} name={name} {...props} />;
 };
 
 CommentInput.propTypes = {

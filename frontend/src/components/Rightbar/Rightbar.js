@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
@@ -8,6 +8,7 @@ import { clearCategory, handleSearchValue, setLoadingAction, setSelectedCategory
 import { clearPosts, getNewestPostsBySection } from '../../redux/actions/postActions';
 import history from '../../templates/history';
 import SearchInput from '../atoms/SearchInput/SearchInput';
+import './style.css';
 
 const StyledContainer = styled.div`
     /* height:100%; */
@@ -15,7 +16,8 @@ const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-right: 10%;
-    position:absolute;
+    position:sticky;
+    float: right;
     right:0;
     padding: 20px;
     display:${({ location }) => (location === '/o-mnie' || location === '/admin-cms/login' || location === '/admin-cms/dashboardCMS') ? 'none' : 'inline-flex'};
@@ -39,7 +41,9 @@ const StyledText = styled.p`
     line-height:1.5;
     text-align: justify;
 `;
-const StyledIconSection = styled.div``;
+const StyledIconSection = styled.div`
+    width:100%;
+`;
 const StyledCategorySection = styled(StyledAboutMeSection)``;
 const StyledNewPostsSection = styled(StyledAboutMeSection)``;
 const StyledSelect = styled.select`
@@ -79,6 +83,10 @@ margin:10px 0;
 &:hover {
     color: #5F7C94;
 }
+`;
+
+const StyledCurrentRef = styled.div`
+    width:100%;
 `;
 
 const Rightbar = () => {
@@ -144,7 +152,14 @@ const Rightbar = () => {
                 <StyledTitle>
                     Facebook
                 </StyledTitle>
-                <StyledIconSection />
+                <StyledIconSection>
+                    <StyledCurrentRef
+                        className="fb-page"
+                        data-href="https://www.facebook.com/Zakodujto"
+                        data-hide-cover="false"
+                        data-show-facepile="false"
+                    />
+                </StyledIconSection>
             </StyledAboutMeSection>
             <StyledCategorySection>
                 <StyledTitle>Kategorie</StyledTitle>

@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons";
 import Spinner from "../components/atoms/Spinner";
 import PostCard from "../components/PostCard/PostCard";
-import { clearPosts, getPostsBySectionAndCategory, searchPosts, setPostLoadingAction } from "../redux/actions/postActions";
+import { clearPosts, getPostsBySectionAndCategory, searchPosts, setPostLoadingAction, setPostLoadingMore } from "../redux/actions/postActions";
+import Button from "../components/atoms/Button";
+import circle from '../assets/Spin.svg';
 
 const StyledWrapper = styled.div`
 `;
@@ -12,15 +16,27 @@ const StyledCardContainer = styled.div`
     display: flex;
     flex-direction: column;
 `;
+const StyledLoadMore = styled.h4`
+    text-transform: uppercase;
+    color: ${({ theme }) => theme.primaryBackground};
+    cursor: pointer;
+    width: fit-content;
+    transition: all 0.3s ease;
+
+    &:hover {
+        color: ${({ theme }) => theme.lightBackground};
+    }
+`;
 
 const MainView = ({ section }) => {
     const dispatch = useDispatch();
 
-    const { posts, loading, start, count } = useSelector(({ post }) => ({
+    const { posts, loading, start, count, loadingMore } = useSelector(({ post }) => ({
         posts: post.posts,
         loading: post.loading,
         start: post.start,
         count: post.count,
+        loadingMore: post.loadingMore,
     }), shallowEqual);
 
     const { category, searchText } = useSelector(({ common }) => ({
@@ -28,27 +44,35 @@ const MainView = ({ section }) => {
         searchText: common.searchText,
     }), shallowEqual);
 
-    const fetchPosts = () => {
-        if (!searchText) {
-            dispatch(getPostsBySectionAndCategory(section, category, {
-                start, count,
-            }));
-        } else if (searchText) {
-            dispatch(searchPosts(
-                {
-                    searchText,
-                    start,
-                    count,
-                },
-            ));
-        }
-    };
+    const [loadMore, setLoadMore] = useState(false);
+
+    // const fetchPosts = () => {
+    //     if (loadMore) {
+    //         console.log(start);
+    //         console.log(count);
+    //         if (!searchText) {
+    //             dispatch(getPostsBySectionAndCategory(section, category, {
+    //                 start, count,
+    //             }));
+    //         } else if (searchText) {
+    //             dispatch(searchPosts(
+    //                 {
+    //                     searchText,
+    //                     start,
+    //                     count,
+    //                 },
+    //             ));
+    //         }
+    //         setLoadMore(false);
+    //     }
+    //     return false;
+    // };
 
     useEffect(() => {
         if (!searchText) {
             dispatch(setPostLoadingAction());
             dispatch(getPostsBySectionAndCategory(section, category, {
-                start: 1, count: 5,
+                start: 1, count: 8,
             }));
         } else if (searchText) {
             dispatch(setPostLoadingAction());
@@ -57,30 +81,52 @@ const MainView = ({ section }) => {
                 {
                     searchText,
                     start: 1,
-                    count: 5,
+                    count: 8,
                 },
             ));
         }
-
         return () => {
             dispatch(clearPosts());
         };
     }, [dispatch, section, category, searchText]);
+
+    useEffect(() => {
+        console.log(loadMore);
+        if (loadMore) {
+            if (!searchText) {
+                dispatch(setPostLoadingMore());
+                dispatch(getPostsBySectionAndCategory(section, category, {
+                    start, count,
+                }));
+                setLoadMore(false);
+            } else if (searchText) {
+                dispatch(setPostLoadingMore());
+                dispatch(searchPosts(
+                    {
+                        searchText,
+                        start,
+                        count,
+                    },
+                ));
+                setLoadMore(false);
+            }
+        }
+    }, [start, count, loadMore]);
 
     if (loading && !posts.length) { return <Spinner />; }
     return (
         <StyledWrapper>
             {!loading && posts.length ? (
                 <StyledCardContainer>
-                    <InfiniteScroll
+                    {/* <InfiniteScroll
                         dataLength={posts.length}
                         next={fetchPosts}
                         hasMore
                         style={{
                             display: posts.length === 0 ? 'none' : 'flex', flexDirection: 'column',
                         }}
-                    >
-                        {posts.length && category === 'all categories'
+                    > */}
+                    {posts.length && category === 'all categories'
                     && posts.map(post => (
                         <PostCard
                             id={post._id}
@@ -91,7 +137,7 @@ const MainView = ({ section }) => {
                             mainPhoto={post.mainPhoto}
                         />
                     ))}
-                        {posts.length && category !== 'all categories'
+                    {posts.length && category !== 'all categories'
                 && posts.map(post => (post.category === category
                     && (
                         <PostCard
@@ -104,7 +150,29 @@ const MainView = ({ section }) => {
                         />
                     )
                 ))}
-                    </InfiniteScroll>
+                    {loadMore
+                        ? (
+                            <img
+                                src={circle}
+                                alt='circle-loading-spinner'
+                                style={{
+                                    width: '30px',
+                                    height: '30px',
+                                }}
+                            />
+                        ) : (
+                            <Button onClick={() => { setLoadMore(true); }}>
+                                Załaduj więcej
+
+                                <FontAwesomeIcon
+                                    icon={faChevronCircleDown}
+                                    style={{
+                                        marginLeft: "10px",
+                                    }}
+                                />
+
+                            </Button>
+                        )}
                 </StyledCardContainer>
             ) : <p />}
             {(!loading && !posts.length) ? <p> Nie znaleziono postów pasujących do Twoich kryteriów. Spróbuj ponownie z innymi słowami kluczowymi. </p> : <p />}

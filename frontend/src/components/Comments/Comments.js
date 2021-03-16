@@ -18,18 +18,26 @@ const StyledUserCommentsList = styled.div`
     row-gap: 15px;
 `;
 
+const StyledCommentsHeader = styled.h2`
+    font-size: 22px;
+`;
+
 const Comments = ({ postId }) => {
     const { comments } = useSelector(({ post }) => ({
         comments: post.comments,
     }));
 
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(getComments(postId));
     }, [dispatch, postId]);
 
     return (
         <StyledComentsWrapper>
+            <StyledCommentsHeader>
+                Komentarze
+            </StyledCommentsHeader>
             <AddNewCommentForm postId={postId} />
             <StyledUserCommentsList>
                 {comments.map(c => (
