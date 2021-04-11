@@ -28,7 +28,7 @@ const StyledLoadMore = styled.h4`
     }
 `;
 
-const MainView = ({ section }) => {
+const MainView = ({ section, location }) => {
     const dispatch = useDispatch();
 
     const { posts, loading, start, count, loadingMore } = useSelector(({ post }) => ({
@@ -46,64 +46,40 @@ const MainView = ({ section }) => {
 
     const [loadMore, setLoadMore] = useState(false);
 
-    // const fetchPosts = () => {
-    //     if (loadMore) {
-    //         console.log(start);
-    //         console.log(count);
-    //         if (!searchText) {
-    //             dispatch(getPostsBySectionAndCategory(section, category, {
-    //                 start, count,
-    //             }));
-    //         } else if (searchText) {
-    //             dispatch(searchPosts(
-    //                 {
-    //                     searchText,
-    //                     start,
-    //                     count,
-    //                 },
-    //             ));
-    //         }
-    //         setLoadMore(false);
-    //     }
-    //     return false;
-    // };
-
     useEffect(() => {
-        if (!searchText) {
+        if (!location) {
             dispatch(setPostLoadingAction());
             dispatch(getPostsBySectionAndCategory(section, category, {
-                start: 1, count: 8,
+                start: 1, count: 6,
             }));
-        } else if (searchText) {
+        } else if (location.search) {
             dispatch(setPostLoadingAction());
             dispatch(searchPosts(
-
+                location.search.substring(1),
                 {
-                    searchText,
                     start: 1,
-                    count: 8,
+                    count: 6,
                 },
             ));
         }
         return () => {
             dispatch(clearPosts());
         };
-    }, [dispatch, section, category, searchText]);
+    }, [dispatch, section, category, location]);
 
     useEffect(() => {
-        console.log(loadMore);
         if (loadMore) {
-            if (!searchText) {
+            if (!location) {
                 dispatch(setPostLoadingMore());
                 dispatch(getPostsBySectionAndCategory(section, category, {
                     start, count,
                 }));
                 setLoadMore(false);
-            } else if (searchText) {
+            } else if (location.search) {
                 dispatch(setPostLoadingMore());
                 dispatch(searchPosts(
+                    location.search.substring(1),
                     {
-                        searchText,
                         start,
                         count,
                     },
@@ -161,17 +137,20 @@ const MainView = ({ section }) => {
                                 }}
                             />
                         ) : (
-                            <Button onClick={() => { setLoadMore(true); }}>
-                                Załaduj więcej
+                            posts.length > 5
+                            && (
+                                <Button onClick={() => { setLoadMore(true); }}>
+                                    Załaduj więcej
 
-                                <FontAwesomeIcon
-                                    icon={faChevronCircleDown}
-                                    style={{
-                                        marginLeft: "10px",
-                                    }}
-                                />
+                                    <FontAwesomeIcon
+                                        icon={faChevronCircleDown}
+                                        style={{
+                                            marginLeft: "10px",
+                                        }}
+                                    />
 
-                            </Button>
+                                </Button>
+                            )
                         )}
                 </StyledCardContainer>
             ) : <p />}

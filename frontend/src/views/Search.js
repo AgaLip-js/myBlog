@@ -15,6 +15,7 @@ const StyledWrapper = styled.div`
         width: 90%;
     }
 `;
+
 const StyledTitle = styled.h2`
     letter-spacing: 1px;
     font-size: 32px;
@@ -24,18 +25,17 @@ const StyledTitle = styled.h2`
     padding: 15px 0;
 `;
 
-const Articles = () => {
-    const { category } = useSelector(({ common }) => ({
-        category: common.category,
-    }));
+const Search = ({ location }) => (
+    <StyledWrapper>
+        {location.search !== ''
+            && (
+                <StyledTitle>
+                    {' '}
+                    {`Wyniki wyszukiwania dla: ${location.search.substring(1)}`}
+                </StyledTitle>
+            )}
+        <MainView location={location} />
+    </StyledWrapper>
+);
 
-    return (
-        <StyledWrapper>
-            <StyledTitle>Artykuły</StyledTitle>
-            {category === 'all categories'
-            && <MainView section="artykuly" />}
-        </StyledWrapper>
-    );
-};
-
-export default Articles;
+export default Search;

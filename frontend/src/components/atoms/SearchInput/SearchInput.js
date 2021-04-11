@@ -100,8 +100,8 @@ const SearchInput = ({ primary, secondary }) => {
             dispatch(clearCategory());
 
             const mainLocation = {
-                pathname: '/',
-                state: searchValue,
+                pathname: '/szukaj',
+                search: searchValue,
             };
 
             history.push(mainLocation);

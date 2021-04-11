@@ -39,13 +39,6 @@ const News = () => {
                 && <StyledTitle>Aktualności</StyledTitle> }
             {category !== 'all categories' && section === 'mainView'
             && searchText === '' && <StyledTitle>{category}</StyledTitle> }
-            {searchText !== ''
-            && (
-                <StyledTitle>
-                    {' '}
-                    {`Wyniki wyszukiwania dla: ${searchText}`}
-                </StyledTitle>
-            )}
             <MainView section="mainView" />
         </StyledWrapper>
     );

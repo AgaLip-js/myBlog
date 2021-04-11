@@ -19,7 +19,7 @@ const initialState = {
     loadingComments: false,
     comments: [],
     start: 1,
-    count: 8,
+    count: 6,
     morePosts: [],
     loadingMore: false,
 };
@@ -86,7 +86,7 @@ const postReducer = (state = initialState, action) => {
                 ...state,
                 posts: [],
                 start: 1,
-                count: 8,
+                count: 6,
             };
         case CLEAR_POST:
             return {

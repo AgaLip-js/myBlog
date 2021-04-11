@@ -336,7 +336,7 @@ router.get("/newestPosts/:section", (req, res) => {
 router.post("/search", (req, res) => {
   const start = req.body.start;
   const count = req.body.count;
-  const matchWord = req.body.searchText;
+  const matchWord = req.query.query;
   const regex = new RegExp(matchWord, "i");
 
   Post.find({ title: { $regex: regex } })

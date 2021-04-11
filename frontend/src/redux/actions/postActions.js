@@ -170,8 +170,9 @@ export const getMorePostsByCategory = category => (dispatch) => {
 
 // Search Posts
 export const searchPosts = (matchWord, data) => (dispatch) => {
+    console.log(matchWord);
     axios
-        .post(`/api/posts/search`, matchWord, data)
+        .post(`/api/posts/search/?query=${matchWord}`, data)
         .then(res => dispatch({
             type: SEARCH_POSTS,
             payload: res.data,

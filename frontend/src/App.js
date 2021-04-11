@@ -17,6 +17,7 @@ import AboutMe from "./views/AboutMe";
 import Articles from "./views/Articles";
 import DashboardCMS from "./views/DashboardCMS";
 import News from "./views/News";
+import Search from "./views/Search";
 import PostView from "./views/PostView";
 import PrivacyPolicy from "./views/PrivacyPolicy";
 import PrivateLogin from "./views/PrivateLogin";
@@ -57,6 +58,7 @@ function App() {
                             <Route exact path="/nauka" component={() => <Science />} />
                             <Route exact path="/artykuly" component={() => <Articles />} />
                             <Route exact path="/o-mnie" component={AboutMe} />
+                            <Route exact path="/szukaj" component={Search} />
                             <Route exact path="/admin-cms/login" component={PrivateLogin} />
                             <Route exact path="/post/:id" component={PostView} />
                             <Route exact path="/regulamin" component={TermsOfService} />

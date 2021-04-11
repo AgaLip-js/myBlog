@@ -4,7 +4,7 @@ import styled from "styled-components";
 import MainView from "./MainView";
 
 const StyledWrapper = styled.div`
-    min-height: 100vh;
+    min-height: 1100px;
     padding-top: 20px;
     width: 70%;
     padding-left: 10%;
