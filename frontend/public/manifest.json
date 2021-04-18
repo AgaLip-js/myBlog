@@ -1,12 +1,6 @@
 {
-  "theme_color": "#5F7D95",
-  "background_color": "#ffffff",
-  "display": "browser",
-  "scope": "/",
-  "start_url": "/https://zakoduj-to.pl/",
   "name": "Zakoduj to - blog o nauce programowania",
   "short_name": "Zakoduj to",
-  "description": "Blog o programowaniu w j\u0119zyku Javascript",
   "icons": [
     {
       "src": "favicon.ico",
@@ -33,5 +27,9 @@
           "sizes": "512x512",
           "type": "image/png"
       }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
 }
