@@ -17,15 +17,19 @@ const StyledWrapper = styled.div`
 
 const RODO = () => (
     <StyledWrapper>
-        <h1 style={{
-            textAlign: "center",
-        }}
+        <h1
+            className="page-title"
+            style={{
+                textAlign: "left",
+                fontSize: '24px',
+            }}
         >
             Obowiązek informacyjny RODO
 
         </h1>
         <p>
             Poniższa informacja stanowi zwięzły, zrozumiały i przejrzysty skrót informacji zamieszczonych w
+            {' '}
             <a href="https://zakoduj-to.pl/polityka-prywatnosci">Polityce Prywatności</a>
             {' '}
             odnośnie Administratora danych, celu i sposobu przetwarzania danych osobowych oraz Twoich praw w związku z tym przetwarzaniem, w formie wymaganej do spełnienia obowiązku informacyjnego RODO. Szczegóły dotyczące sposobu przetwarzania i podmiotów uczestniczących w tym procesie dostępne są we wskazanej polityce.
@@ -68,6 +72,7 @@ const RODO = () => (
         </p>
         <p>
             Szczegółowy zakres przetwarzanych danych dostępny jest w
+            {' '}
             <a href="https://zakoduj-to.pl/polityka-prywatnosci">Polityce Prywatności</a>
             .
         </p>

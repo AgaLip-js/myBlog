@@ -67,7 +67,7 @@ const StyledItemView = styled.li`
 
   &.active {
     font-weight: 600;
-    color: black;
+    color: ${({ theme }) => theme.lightBackground};
   }
 `;
 const Menu = ({ open, setOpen }) => (

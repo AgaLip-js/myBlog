@@ -52,6 +52,21 @@ const StyledMainImage = styled.div`
     width: 600px;
     height: 115px;
     cursor:pointer;
+
+    @media (max-width: 650px) {
+        width: 500px;
+    }
+
+    @media (max-width: 500px) {
+        width: 400px;
+        height: 75px;
+    }
+
+    @media (max-width: 400px) {
+        width: 320px;
+        height: 65px;
+    }
+
 `;
 
 const StyledMainLogo = styled.div`

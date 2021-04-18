@@ -1,13 +1,13 @@
 import { faCamera, faCode, faFont } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import isEmpty from "../../validation/is-empty";
 import { addContent, editContent, removeContent } from "../../redux/actions/contentAction";
 import { addImage } from "../../redux/actions/imageAction";
-import { addPost, clearPost, getPost } from "../../redux/actions/postActions";
+import { addPost, getPost } from "../../redux/actions/postActions";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 import InputImg from "../atoms/InputImg";
@@ -104,7 +104,7 @@ const AddPostForm = ({ option }) => {
         post: store.post.post,
     }));
 
-    const [selectedPost, setSelectedPost] = useState(null);
+    const [, setSelectedPost] = useState(null);
     const [fileName, setFileName] = useState([]);
     const [mainPhoto, setMainPhoto] = useState([]);
     const contentArray = post.content ? post.content : [];

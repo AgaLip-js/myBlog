@@ -4,14 +4,14 @@ import styled from "styled-components";
 import MainView from "./MainView";
 
 const StyledWrapper = styled.div`
-    min-height: 1100px;
+    min-height: 1320px;
     padding-top: 20px;
     width: 70%;
     padding-left: 10%;
     padding-right: 3%;
     padding-bottom: 20px;
 
-    @media (max-width: 1200px) {
+    @media (max-width: 1300px) {
         width: 90%;
     }
 `;

@@ -2,7 +2,6 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopyright } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-import { shallowEqual, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 const StyledFooterContainer = styled.footer`
@@ -11,7 +10,7 @@ const StyledFooterContainer = styled.footer`
     bottom: 0;
     width: 100%;
     height: fit-content;
-    background: #5f7d95;
+    background: ${({ theme }) => theme.footerLightBlue};
     z-index: 1;
 `;
 const StyledFooterList = styled.div`
@@ -19,11 +18,17 @@ const StyledFooterList = styled.div`
     justify-content: center;
     list-style-type: none;
     align-items: center;
-    color: white;
+    color:${({ theme }) => theme.primaryTitle};
     padding-left: 0;
     font-size: 14px;
     margin: 0;
     padding: 0;
+
+    @media (max-width: 760px) {
+    display: flex;
+    flex-direction: column;
+
+    }
 `;
 
 const StyledTitle = styled.p`
@@ -35,27 +40,36 @@ const StyledTitle = styled.p`
 
 const StyledLink = styled(NavLink)`
     text-decoration: none;
-    color: white;
+    color: ${({ theme }) => theme.primaryTitle};
 
     &:hover {
-        color:#cadcec;
+        color:${({ theme }) => theme.primaryText};
     }
 
 `;
-const StyledCopywrightIcon = styled.span``;
+const StyledCopyrightWrapper = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 
-const Footer = () => {
-    const { posts, loading } = useSelector(
-        ({ post }) => ({
-            posts: post.posts,
-            loading: post.loading,
-        }),
-        shallowEqual,
-    );
+    @media (max-width: 760px) {
+    justify-content: center;
 
-    return (
-        <StyledFooterContainer>
-            <StyledFooterList>
+        p {
+            margin-right:0 !important;
+        }
+
+    }
+
+`;
+const StyledCopywrightIcon = styled.span`
+    font-size: 0.7rem;
+`;
+
+const Footer = () => (
+    <StyledFooterContainer>
+        <StyledFooterList>
+            <StyledCopyrightWrapper>
                 <StyledCopywrightIcon>
                     <FontAwesomeIcon icon={faCopyright} size="2x" />
                 </StyledCopywrightIcon>
@@ -65,14 +79,14 @@ const Footer = () => {
                 >
                     Copyright 2020, Agata Lipiak - Zakoduj to
                 </StyledTitle>
-                <StyledTitle>
-                    <StyledLink to='/regulamin'>Regulamin Serwisu</StyledLink>
-                </StyledTitle>
-                <StyledTitle><StyledLink to='/polityka-prywatnosci'>Polityka Prywatności</StyledLink></StyledTitle>
-                <StyledTitle><StyledLink to='/rodo'>Rodo</StyledLink></StyledTitle>
-            </StyledFooterList>
-        </StyledFooterContainer>
-    );
-};
+            </StyledCopyrightWrapper>
+            <StyledTitle>
+                <StyledLink to='/regulamin'>Regulamin Serwisu</StyledLink>
+            </StyledTitle>
+            <StyledTitle><StyledLink to='/polityka-prywatnosci'>Polityka Prywatności</StyledLink></StyledTitle>
+            <StyledTitle><StyledLink to='/rodo'>Rodo</StyledLink></StyledTitle>
+        </StyledFooterList>
+    </StyledFooterContainer>
+);
 
 export default Footer;

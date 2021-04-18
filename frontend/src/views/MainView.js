@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronCircleDown } from "@fortawesome/free-solid-svg-icons";
 import Spinner from "../components/atoms/Spinner";
@@ -16,32 +15,19 @@ const StyledCardContainer = styled.div`
     display: flex;
     flex-direction: column;
 `;
-const StyledLoadMore = styled.h4`
-    text-transform: uppercase;
-    color: ${({ theme }) => theme.primaryBackground};
-    cursor: pointer;
-    width: fit-content;
-    transition: all 0.3s ease;
-
-    &:hover {
-        color: ${({ theme }) => theme.lightBackground};
-    }
-`;
 
 const MainView = ({ section, location }) => {
     const dispatch = useDispatch();
 
-    const { posts, loading, start, count, loadingMore } = useSelector(({ post }) => ({
+    const { posts, loading, start, count } = useSelector(({ post }) => ({
         posts: post.posts,
         loading: post.loading,
         start: post.start,
         count: post.count,
-        loadingMore: post.loadingMore,
     }), shallowEqual);
 
-    const { category, searchText } = useSelector(({ common }) => ({
+    const { category } = useSelector(({ common }) => ({
         category: common.category,
-        searchText: common.searchText,
     }), shallowEqual);
 
     const [loadMore, setLoadMore] = useState(false);
@@ -105,6 +91,7 @@ const MainView = ({ section, location }) => {
                     {posts.length && category === 'all categories'
                     && posts.map(post => (
                         <PostCard
+                            key={post._id}
                             id={post._id}
                             category={post.category}
                             date={post.date}
@@ -117,6 +104,7 @@ const MainView = ({ section, location }) => {
                 && posts.map(post => (post.category === category
                     && (
                         <PostCard
+                            key={post._id}
                             id={post._id}
                             category={post.category}
                             date={post.date}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -27,22 +27,6 @@ const StyledCommentInputTextAreaComponent = styled.textarea`
 `;
 
 const CommentInput = ({ textArea, handleChange, value, name, ...props }) => {
-    // const timeout = 400;
-    // const isFirstRun = useRef(true);
-
-    // useEffect(() => {
-    //     const delayDebounceFn = setTimeout(() => {
-    //         if (!isFirstRun.current) {
-    //             handleChange(value, name);
-    //         }
-    //         if (isFirstRun.current) {
-    //             isFirstRun.current = false;
-    //         }
-    //     }, timeout);
-
-    //     return () => clearTimeout(delayDebounceFn);
-    // }, [value]);
-
     if (textArea) {
         return <StyledCommentInputTextAreaComponent onChange={handleChange} value={value} name={name} {...props} />;
     }

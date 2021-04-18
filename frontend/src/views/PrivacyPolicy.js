@@ -19,7 +19,8 @@ const PrivacyPolicy = () => (
     <StyledWrapper>
         <article>
             <h1 style={{
-                textAlign: "center",
+                textAlign: "left",
+                fontSize: '24px',
             }}
             >
                 Polityka Prywatności
@@ -34,7 +35,8 @@ const PrivacyPolicy = () => (
             </p>
             <p>
                 Poniższa Polityka Prywatności jest integralną częścią
-                <a href="https://zakoduj-to.pl/regulamin"> Regulaminu Serwisu</a>
+                {' '}
+                <a href="https://zakoduj-to.pl/regulamin">Regulaminu Serwisu</a>
                 , który określa zasady, prawa i obowiązki Użytkowników korzystających z Serwisu.
             </p>
             <h2 style={{
@@ -282,6 +284,7 @@ const PrivacyPolicy = () => (
                             <li>
                                 <p>
                                     Informacje o sposobie wyłączenia plików Cookie w najpopularniejszych przeglądarkach komputerowych dostępne są na stronie:
+                                    {' '}
                                     <a rel="external" href="https://nety.pl/jak-wylaczyc-pliki-cookie/">jak wyłączyć cookie</a>
                                     {' '}
                                     lub u jednego ze wskazanych dostawców:
@@ -289,6 +292,7 @@ const PrivacyPolicy = () => (
                                         <li>
                                             <a rel="nofollow external" href="https://support.google.com/accounts/answer/61416?co=GENIE.Platform%3DDesktop&#038;hl=pl">
                                                 Zarządzanie plikami cookies w przeglądarce
+                                                {' '}
                                                 <strong>Chrome</strong>
 
                                             </a>
@@ -296,6 +300,7 @@ const PrivacyPolicy = () => (
                                         <li>
                                             <a rel="nofollow external" href="https://help.opera.com/pl/latest/web-preferences/">
                                                 Zarządzanie plikami cookies w przeglądarce
+                                                {' '}
                                                 <strong>Opera</strong>
 
                                             </a>
@@ -303,6 +308,7 @@ const PrivacyPolicy = () => (
                                         <li>
                                             <a rel="nofollow external" href="https://support.mozilla.org/pl/kb/blokowanie-ciasteczek">
                                                 Zarządzanie plikami cookies w przeglądarce
+                                                {' '}
                                                 <strong>FireFox</strong>
 
                                             </a>
@@ -310,6 +316,7 @@ const PrivacyPolicy = () => (
                                         <li>
                                             <a rel="nofollow external" href="https://support.microsoft.com/pl-pl/help/4027947/microsoft-edge-delete-cookies">
                                                 Zarządzanie plikami cookies w przeglądarce
+                                                {' '}
                                                 <strong>Edge</strong>
 
                                             </a>
@@ -317,6 +324,7 @@ const PrivacyPolicy = () => (
                                         <li>
                                             <a rel="nofollow external" href="https://support.apple.com/pl-pl/guide/safari/sfri11471/mac">
                                                 Zarządzanie plikami cookies w przeglądarce
+                                                {' '}
                                                 <strong>Safari</strong>
 
                                             </a>
@@ -324,6 +332,7 @@ const PrivacyPolicy = () => (
                                         <li>
                                             <a rel="nofollow external" href="https://windows.microsoft.com/pl-pl/internet-explorer/delete-manage-cookies#ie=ie-11">
                                                 Zarządzanie plikami cookies w przeglądarce
+                                                {' '}
                                                 <strong>Internet Explorer 11</strong>
 
                                             </a>

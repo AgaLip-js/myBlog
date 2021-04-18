@@ -74,6 +74,7 @@ const TermsOfService = () => (
                 </li>
                 <li>
                     W celu zapewnienia bezpieczeństwa Usługodawcy, Usługobiorcy oraz innych Usługobiorców korzystających z Serwisu, wszyscy Usługobiorcy korzystający z Serwisu powinni stosować się do ogólnie przyjętych
+                    {' '}
                     <a href="https://nety.pl/cyberbezpieczenstwo/zasady-ogolne-korzystania-z-sieci-internet/">zasad bezpieczeństwa w sieci</a>
                     ,
                 </li>

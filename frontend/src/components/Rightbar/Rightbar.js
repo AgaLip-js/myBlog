@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
@@ -21,7 +21,7 @@ const StyledContainer = styled.div`
     right:0;
     padding: 20px;
     display:${({ location }) => (location === '/o-mnie' || location === '/admin-cms/login' || location === '/admin-cms/dashboardCMS') ? 'none' : 'inline-flex'};
-    @media (max-width: 1200px) {
+    @media (max-width: 1300px) {
         display: none;
     }
 
@@ -166,7 +166,7 @@ const Rightbar = () => {
                 <StyledSelect onChange={handleCategoryChange} name="category" value={category}>
                     <StyledOption value="all categories">Wybierz kategorie</StyledOption>
                     {(categories && categories.length) && categories.map(cat => (
-                        <StyledOption value={cat}>
+                        <StyledOption value={cat} key={cat}>
                             {cat}
                         </StyledOption>
                     ))}
@@ -178,7 +178,7 @@ const Rightbar = () => {
                 <StyledPostsContainer>
 
                     {newestPosts && newestPosts.map(newPost => (
-                        <StyledPostLink as={NavLink} to={path(newPost._id)} title={newPost.title}>
+                        <StyledPostLink as={NavLink} to={path(newPost._id)} title={newPost.title} key={newPost._id}>
                             {newPost.title}
                         </StyledPostLink>
                     ))}

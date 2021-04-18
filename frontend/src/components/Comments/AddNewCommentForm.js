@@ -1,6 +1,6 @@
 // import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { addComment, addReply } from "../../redux/actions/commentActions";
